@@ -29,9 +29,19 @@ def probe(home):
         rows=db.execute('select id,'+name+' from threads where archived=0 and agent_path is null'+clause+' order by updated_at desc limit 100').fetchall()
     return {'chatCount':len(rows),'chats':[{'id':r[0],'title':r[1]} for r in rows]}
 
+def default_home(cfg=None):
+    return Path((cfg or {}).get('codexHome') or os.environ.get('CODEX_HOME') or Path.home()/'.codex').expanduser().resolve()
+
+def discovery(home):
+    try:
+        found=probe(home)
+        return {'available':True,'chatCount':found['chatCount']}
+    except (ValueError,sqlite3.Error,OSError) as e:
+        return {'available':False,'problem':str(e) if isinstance(e,ValueError) else 'source-unavailable'}
+
 def status(base):
     cfg=config(base)
-    result={'connected':False,'mode':'demo','base':str(base),'codexHome':cfg.get('codexHome',str(Path.home()/'.codex')),'ledgerDirectory':cfg.get('ledgerDirectory',str(base/'live')),'trackingInstalled':False,'manualUnreadBound':(base/'live/desktop-unread-binding.json').exists()}
+    result={'connected':False,'mode':'demo','base':str(base),'codexHome':cfg.get('codexHome',str(default_home())),'ledgerDirectory':cfg.get('ledgerDirectory',str(base/'live')),'trackingInstalled':False,'manualUnreadBound':(base/'live/desktop-unread-binding.json').exists()}
     if cfg.get('enabled'):
         try:
             result.update(probe(Path(result['codexHome'])));validate_ledger(Path(result['ledgerDirectory']))
@@ -41,6 +51,7 @@ def status(base):
     if installation:
         path=Path(installation['path'])
         result['trackingInstalled']=path.is_file() and 'roadmap-dashboard-managed-v1' in path.read_text()
+    if not result['connected']:result['discovery']=discovery(default_home(cfg))
     return result
 
 def scoped_state(home):
@@ -50,8 +61,18 @@ def scoped_state(home):
 def action(request,base):
     base=base.expanduser().resolve();base.mkdir(parents=True,exist_ok=True);os.chmod(base,0o700)
     op=request.get('op','status');cfg=config(base)
+    if op=='start-tracking':
+        if not isinstance(request.get('includeRoadmap',True),bool):raise ValueError('invalid-roadmap-choice')
+        action({'op':'connect','codexHome':str(default_home(cfg))},base)
+        warning=None
+        if request.get('includeRoadmap',True):
+            try:action({'op':'install-tracking'},base)
+            except (ValueError,OSError) as e:warning=str(e) if isinstance(e,ValueError) else 'tracking-install-failed'
+        result=status(base)
+        if warning:result['trackingWarning']=warning
+        return result
     if op=='connect':
-        home=Path(request.get('codexHome') or cfg.get('codexHome') or Path.home()/'.codex').expanduser().resolve()
+        home=Path(request.get('codexHome') or default_home(cfg)).expanduser().resolve()
         probe(home)
         ledger=Path(request.get('ledgerDirectory') or cfg.get('ledgerDirectory') or base/'live').expanduser().resolve()
         if request.get('ledgerDirectory'):validate_ledger(ledger)

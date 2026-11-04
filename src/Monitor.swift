@@ -87,6 +87,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         for t in [NSWindow.ButtonType.closeButton,.miniaturizeButton,.zoomButton] { panel.standardWindowButton(t)?.isHidden = true }
         if let screen = NSScreen.main { panel.setFrameOrigin(NSPoint(x:screen.visibleFrame.maxX-422,y:screen.visibleFrame.maxY-700)) }
         if !qa && !restore && !captureOnly && !hotKeyQA { panel.setFrameAutosaveName("RoadmapDashboardPreviewV1") }
+        if CommandLine.arguments.contains("--quick-start-smoke") || CommandLine.arguments.contains("--first-launch-smoke"),let widthText=argument("--qa-width"),let width=Double(widthText),width>=320,width<=680 { panel.setContentSize(NSSize(width:width,height:660)) }
         let controller = WKUserContentController()
         controller.add(self,name:"monitor")
         let configWeb = WKWebViewConfiguration()
@@ -299,9 +300,12 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
             ready=true;loadSnapshot()
             if !liveMode && !qa && !restore && !captureOnly && !hotKeyQA && !onboardingQA && connection.isEmpty { web.evaluateJavaScript("window.centralOpenSetup()",completionHandler:nil) }
             writeReport(["level":panel.level.rawValue,"normalWindow":panel.level == .normal,"commandD":"bring-front-if-covered;hide-if-already-active"],"window-mode.json")
-            if CommandLine.arguments.contains("--first-launch-smoke") {
+            if CommandLine.arguments.contains("--quick-start-smoke") {
+                DispatchQueue.main.asyncAfter(deadline:.now()+1) { self.runQuickStartQA() }
+            }
+            else if CommandLine.arguments.contains("--first-launch-smoke") {
                 DispatchQueue.main.asyncAfter(deadline:.now()+1) {
-                    self.web.evaluateJavaScript("({setupVisible:!document.getElementById('connection-panel').hidden,language:document.documentElement.lang,demo:document.getElementById('sync-time').textContent.includes('sample'),tasks:document.querySelectorAll('.task').length})") { result,error in
+                    self.web.evaluateJavaScript("({setupVisible:!document.getElementById('connection-panel').hidden,language:document.documentElement.lang,demo:document.getElementById('sync-time').textContent.includes('sample'),tasks:document.querySelectorAll('.task').length,startAvailable:!!document.querySelector('#start-tracking'),setupText:document.querySelector('#connection-content').textContent,overflow:document.documentElement.scrollWidth>innerWidth})") { result,error in
                         self.writeReport(["ui":result ?? NSNull(),"error":error?.localizedDescription ?? NSNull(),"bundledPython":self.python.hasPrefix(Bundle.main.resourceURL!.path)],"first-launch.json")
                         NSApp.terminate(nil)
                     }
@@ -353,7 +357,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         loadSnapshot()
     }
     func connectionRequest(_ source:[String:Any]) {
-        guard !setupBusy,let op=source["op"] as? String,["status","connect","disconnect","choose-home","choose-ledger","link-ledger","own-ledger","install-tracking","unread-begin","unread-finish"].contains(op) else { return }
+        guard !setupBusy,let op=source["op"] as? String,["status","connect","start-tracking","disconnect","choose-home","choose-ledger","link-ledger","own-ledger","install-tracking","unread-begin","unread-finish"].contains(op) else { return }
         var request=source
         if op == "choose-home" || op == "choose-ledger" {
             let chooser=NSOpenPanel();chooser.canChooseDirectories=op == "choose-home";chooser.canChooseFiles=op == "choose-ledger";chooser.allowsMultipleSelection=false
@@ -400,6 +404,30 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         web.takeSnapshot(with:nil) { image,error in
             if let image=image,let tiff=image.tiffRepresentation,let bitmap=NSBitmapImageRep(data:tiff),let png=bitmap.representation(using:.png,properties:[:]) { try? png.write(to:self.reportRoot.appendingPathComponent(name),options:.atomic) }
             completion()
+        }
+    }
+    func runQuickStartQA() {
+        web.evaluateJavaScript("""
+        (()=>{const b=document.querySelector('#start-tracking');if(!b||b.disabled)throw Error('Start tracking action missing');
+        const choice=document.querySelector('.tracking-choice input');if(!choice?.checked)throw Error('Roadmap choice missing');
+        document.querySelector('#language').click();if(!b)throw Error('language');document.querySelector('#language').click();
+        document.querySelector('#start-tracking').click();return {action:true,explicitRoadmapChoice:true};})();
+        """) { value,error in
+            if let error=error { self.writeReport(["error":error.localizedDescription],"quick-start.json");NSApp.terminate(nil);return }
+            DispatchQueue.main.asyncAfter(deadline:.now()+3) {
+                self.web.evaluateJavaScript("""
+                (()=>{const c=document.querySelector('#connection-content').textContent;
+                if(!c.includes('Local conversations connected'))throw Error('Not connected');
+                if(!c.includes('Roadmap skill installed'))throw Error('Skill not installed');
+                if(document.querySelector('#tasks').textContent.includes('keyboard & search'))throw Error('Sample tasks leaked');
+                const live=document.querySelector('#sync-time').textContent;if(live.includes('sample'))throw Error('Demo feed remains');
+                document.querySelector('#language').click();if(!document.querySelector('#connection-content').textContent.includes('真实对话已接入'))throw Error('Chinese status');
+                if(!document.querySelector('#connection-panel').hidden)throw Error('Setup did not dismiss after success');return {width:innerWidth,setupDismissed:true,oneClickConnected:true,skillInstalled:true,noDemoTasks:true,liveFeed:true,bilingual:true,overflow:document.documentElement.scrollWidth>innerWidth};})();
+                """) { result,error in
+                    self.writeReport(["ui":result ?? NSNull(),"error":error?.localizedDescription ?? NSNull()],"quick-start.json")
+                    self.capture("quick-start.png") { NSApp.terminate(nil) }
+                }
+            }
         }
     }
     func runOnboardingQA() {

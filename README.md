@@ -26,13 +26,13 @@ The panel has independently scrollable sections, a draggable divider, five theme
 
 ## Get started in three steps
 
-**Apple silicon app preview:** [download v0.5.0-preview.1](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.1). The app includes Python and does not require developer tools. It is **not notarized**; macOS may block first launch. Another physical Mac has not yet been verified. Read [installation and test instructions](docs/INSTALL-MACOS.md).
+**Apple silicon app preview:** [download v0.5.0-preview.2](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.2). The app includes Python and does not require developer tools. It is **not notarized**; macOS may block first launch. Another physical Mac has not yet been verified. Read [installation and test instructions](docs/INSTALL-MACOS.md).
 
 For a **source installation**, you need macOS 15+, Swift 6 command-line tools and Python 3.9+.
 
 1. **Install.** [Download the source preview](https://github.com/TeabagCollector/roadmap-dashboard/releases/latest), extract it, and run `Install.command`. For a no-install look, open `src/index.html` in a browser.
-2. **Connect.** Open the native app's gear button and select **Connect local ChatGPT Desktop work records**. Start with a new roadmap, or choose **Share an existing roadmap** if you already have a `ledger.json`.
-3. **Track a real task.** In setup, optionally choose **Install roadmap skill**. Start a new supported agent chat and invoke `$roadmap-dashboard-sync` with a concrete task. The agent maintains the plan at meaningful checkpoints; use the panel to inspect progress and check results.
+2. **Start tracking.** On first launch, the app checks the default local Codex work-data folder. When found, click **Start tracking real work**. Leave **Also enable roadmap tracking** selected to install the separate sync skill in the same action. No login or API key is needed. If nothing is found, start a local work chat in Codex or choose its data folder.
+3. **Do real work.** Existing local conversation status appears after connection. Start a new supported Codex work chat with a concrete task so it can discover the installed roadmap skill. For an already-open chat, invoke `$roadmap-dashboard-sync` once. The working agent maintains the roadmap at plan and delivery checkpoints; the panel does not invent tasks from every message. An existing `ledger.json` can still be shared from setup.
 
 The browser preview uses fictional data and cannot connect real files. The source-built application and data directory retain their existing Roadmap Dashboard Preview names; the prebuilt candidate is named Dashboard for Codex. See the [full setup and removal guide](docs/CONNECT.md) for dependency checks, manual unread setup, shared roadmaps and troubleshooting.
 

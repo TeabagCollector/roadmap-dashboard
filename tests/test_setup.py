@@ -10,6 +10,28 @@ class SetupTests(unittest.TestCase):
   c=sqlite3.connect(self.home/'state_5.sqlite');c.execute('create table threads(id,title,name,cwd,project_id,rollout_path,archived,agent_path,updated_at,thread_source)');c.execute('insert into threads values(?,?,?,?,?,?,?,?,?,?)',('00000000-0000-4000-8000-000000000301','Sample','Sample','/tmp/demo',None,str(self.log),0,None,1,'user'));c.commit();c.close()
  def tearDown(self):self.tmp.cleanup()
  def connect(self):return setup.action({'op':'connect','codexHome':str(self.home)},self.base)
+ def test_discovery_is_read_only_and_does_not_enroll(self):
+  before=(self.home/'state_5.sqlite').read_bytes(),self.log.read_bytes()
+  with patch.dict('os.environ',{'CODEX_HOME':str(self.home)}):result=setup.action({'op':'status'},self.base)
+  self.assertTrue(result['discovery']['available']);self.assertFalse(result['connected'])
+  self.assertFalse((self.base/'connection.json').exists());self.assertFalse((self.home/'skills').exists())
+  self.assertEqual(before,((self.home/'state_5.sqlite').read_bytes(),self.log.read_bytes()))
+ def test_one_click_connects_and_enrolls_only_selected_skill(self):
+  with patch.dict('os.environ',{'CODEX_HOME':str(self.home)}):result=setup.action({'op':'start-tracking','includeRoadmap':True},self.base)
+  self.assertTrue(result['connected']);self.assertTrue(result['trackingInstalled'])
+  self.assertFalse((self.home/'AGENTS.md').exists());self.assertFalse((self.home/'hooks.json').exists())
+ def test_one_click_without_roadmap_and_missing_source(self):
+  with patch.dict('os.environ',{'CODEX_HOME':str(self.home)}):result=setup.action({'op':'start-tracking','includeRoadmap':False},self.base)
+  self.assertTrue(result['connected']);self.assertFalse(result['trackingInstalled'])
+  fresh=self.root/'another-profile'
+  with patch.dict('os.environ',{'CODEX_HOME':str(self.root/'missing')}):
+   self.assertFalse(setup.action({'op':'status'},fresh)['discovery']['available'])
+   with self.assertRaisesRegex(ValueError,'codex-not-found'):setup.action({'op':'start-tracking'},fresh)
+  self.assertFalse((fresh/'connection.json').exists())
+ def test_one_click_skill_conflict_preserves_user_content(self):
+  path=self.home/'skills/roadmap-dashboard-sync/SKILL.md';path.parent.mkdir(parents=True);path.write_text('user owned')
+  with patch.dict('os.environ',{'CODEX_HOME':str(self.home)}):result=setup.action({'op':'start-tracking'},self.base)
+  self.assertTrue(result['connected']);self.assertEqual(result['trackingWarning'],'skill-exists');self.assertEqual(path.read_text(),'user owned')
  def test_preflight_failure_does_not_replace_connection(self):
   self.connect();before=(self.base/'connection.json').read_bytes()
   with self.assertRaises(ValueError):setup.action({'op':'connect','codexHome':str(self.root/'missing')},self.base)

@@ -24,13 +24,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 4898,
-      "sha256": "42b3466f743538dabb9a3db46adbb5f22b29a516685f041aad186941f7c89ac3"
+      "bytes": 5202,
+      "sha256": "7b593fefd6847e3be47cdf94fc6936fff7414fe816c55fe55ddfaec4324fd518"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 4328,
-      "sha256": "e7cc5fc0991063897d2734de123402d995f153d2ffe2b12acaf8adec09185000"
+      "bytes": 4616,
+      "sha256": "cb82cec11dd42f7c98bf38cbd442f53bd2b1d53da758afaa7f6c002e3a9a7c4c"
     },
     {
       "path": "build.sh",
@@ -39,8 +39,8 @@
     },
     {
       "path": "docs/CONNECT.md",
-      "bytes": 6395,
-      "sha256": "ffb2e40baa45f4fd8f49249d6c330b96920458e51870c761de14e946c18ee2e7"
+      "bytes": 7121,
+      "sha256": "b82edb74276a3c61bddd355516d506ed05102f17bcd4190aeb23d739dbe32393"
     },
     {
       "path": "docs/DEMO.md",
@@ -49,8 +49,8 @@
     },
     {
       "path": "docs/INSTALL-MACOS.md",
-      "bytes": 4362,
-      "sha256": "3bd01ab82dab090174552c56a25eea631dcc89fed5e2af67e56b089e2d11aaaf"
+      "bytes": 4782,
+      "sha256": "714488746db6d3ad7bfab0ec62945491a67310bb712bd75831aa53def0a520ec"
     },
     {
       "path": "docs/LANDSCAPE.md",
@@ -59,8 +59,8 @@
     },
     {
       "path": "docs/PRIVACY.md",
-      "bytes": 2221,
-      "sha256": "71ca64a00205b21ff8cb1d098bbf98f28fe10f0f4557458333e3abf467d63b5c"
+      "bytes": 2696,
+      "sha256": "caf7c527555f9951cb7069af207fa9ff9bd1e3ca5abbfc76529c0663453a9f5e"
     },
     {
       "path": "docs/demo-en.gif",
@@ -100,7 +100,7 @@
     {
       "path": "scripts/package_macos.py",
       "bytes": 4310,
-      "sha256": "5ae786c437763c27b971fe629aef22e30c45c77c648031888d20b38dea6821fe"
+      "sha256": "e0d3322a31715f0c479f0eab0d96a694fb86e74e24c2422d80b0d8a765c2f0e9"
     },
     {
       "path": "skills/roadmap-dashboard-sync/SKILL.md",
@@ -109,18 +109,18 @@
     },
     {
       "path": "src/Monitor.swift",
-      "bytes": 35713,
-      "sha256": "8d064e04bcb40c738f5645699ec358e9c65096f65699fe167f14a4ee68a41c41"
+      "bytes": 38547,
+      "sha256": "9e9cd80d5b13081825a7fc1fb606a18db0a519c4b815e557571a91299d6aef78"
     },
     {
       "path": "src/app.js",
-      "bytes": 15232,
-      "sha256": "1cbd1e81ca88ca3ad6e039ff8407819dbf80c599ecf929a815bba36d1779bdb9"
+      "bytes": 15300,
+      "sha256": "726ea48adab7ba3e2fbee585c25e977840db4010145790e861b1cf146c010755"
     },
     {
       "path": "src/connection.js",
-      "bytes": 6369,
-      "sha256": "bee8e970d57313061cae77c3303ad30bf5fb982d9681e874bf8e532aebafc24f"
+      "bytes": 9208,
+      "sha256": "e225148ee235ffb19f9b27345721e7b2cd2e5dd4e198b4a6e4e9bad1d27b1eea"
     },
     {
       "path": "src/conversation-model.js",
@@ -134,8 +134,8 @@
     },
     {
       "path": "src/i18n.js",
-      "bytes": 5539,
-      "sha256": "6dd6722658e233d2e0b947d6083ebf16903d306dd533a678c1d218016b19f2b8"
+      "bytes": 5690,
+      "sha256": "0824ca145d63192f79b494a1a413db3e257fd8365e8a0b00e3f0f6fdb9068b35"
     },
     {
       "path": "src/index.html",
@@ -149,8 +149,8 @@
     },
     {
       "path": "src/style.css",
-      "bytes": 9243,
-      "sha256": "927dcf00b7faf9db46e9c7bdcca0c6a94a3fb1389b25cd6a36e5e74508387a26"
+      "bytes": 9467,
+      "sha256": "a2c6ab9bcf540cb31b914be54a2b57b7313bfaa3fbf6eb76a26e6f0285081417"
     },
     {
       "path": "sync/client.py",
@@ -164,8 +164,8 @@
     },
     {
       "path": "sync/setup.py",
-      "bytes": 7248,
-      "sha256": "77bcc2a11fbf588054588b7841f4b91d512b21d295197198cb15b1f2e5e35b5a"
+      "bytes": 8286,
+      "sha256": "d94e49466c00e91510cb51054b1c8e0ba4103308cdbfad93f106d05bedd4b590"
     },
     {
       "path": "tests/conversations.test.cjs",
@@ -179,8 +179,8 @@
     },
     {
       "path": "tests/test_setup.py",
-      "bytes": 5773,
-      "sha256": "a81360d5b0310547439ef50f31c8ebf47be81f0a80fb35d6662c98394b00ee99"
+      "bytes": 7788,
+      "sha256": "1d709c6df9f66657707546a66b5b28dd92bd124de1e6189f4276663c8e035cc0"
     },
     {
       "path": "tests/test_sync.py",

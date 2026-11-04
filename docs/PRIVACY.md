@@ -6,6 +6,8 @@ The browser and native demo use bundled fictional examples. Browser preferences 
 
 ## Local work conversations
 
+First-run setup checks the default local work-data folder read-only to determine whether its thread index is supported and how many local conversations are available. It uses the configured folder, `CODEX_HOME`, or `~/.codex`; it does not search unrelated folders. This discovery does not connect the panel, read event-log tails, or install a skill. You explicitly choose **Start tracking real work** before connection; a visible roadmap option controls skill installation.
+
 When you choose to connect ChatGPT Desktop's local work records, the app opens the local thread index read-only and reads bounded event-log tails for activity and structured plans. Chat titles, project labels and task evidence are displayed on your Mac. It does not log in to your account, read auth-token files, or fetch cloud conversations.
 
 Optional manual-unread setup observes a read-to-unread change you make in the desktop app. It uses that verified local identity/host scope; it does not combine accounts or change source read state. Re-run enrollment after changing desktop identities. The state file used for this feature may contain other desktop settings; only scoped unread metadata is retained.

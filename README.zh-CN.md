@@ -26,13 +26,13 @@ An independent macOS companion for local work in ChatGPT Desktop.
 
 ## 三步入门
 
-**Apple silicon 应用测试预览：** [下载 v0.5.0-preview.1](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.1)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截，第二台真实 Mac 仍待验证。请先阅读[安装与测试说明](docs/INSTALL-MACOS.md)。
+**Apple silicon 应用测试预览：** [下载 v0.5.0-preview.2](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.2)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截，第二台真实 Mac 仍待验证。请先阅读[安装与测试说明](docs/INSTALL-MACOS.md)。
 
 如果选择**源码安装**，需要 macOS 15+、Swift 6 命令行工具和 Python 3.9+。
 
 1. **安装。** [下载源码预览](https://github.com/TeabagCollector/roadmap-dashboard/releases/latest)，解压后运行 `Install.command`。只想先看看，可以在浏览器打开 `src/index.html`。
-2. **接入。** 在原生面板的齿轮页选择“连接 ChatGPT Desktop 本机工作记录”。初次使用建立新清单；已有 `ledger.json` 可选“使用已有清单”。
-3. **追踪工作。** 可在接入页选择安装 `roadmap-dashboard-sync` skill，在新的受支持 agent 对话中用 `$roadmap-dashboard-sync` 发起一个具体任务。agent 在计划、交付等节点维护路线，你在面板查看进度和核验结果。
+2. **开始追踪。** 首次打开会检测默认的本机 Codex 工作记录。找到后点“开始追踪真实工作”；保持勾选“同时启用任务路线同步”，可在同一次操作中安装独立同步 skill，不需要登录或 API Key。未找到时，先在 Codex 开一次本机工作对话，或选择正确的记录文件夹。
+3. **照常开工。** 接入后就能读取已有本机对话状态。新开受支持的 Codex 工作对话、交付具体任务，让 agent 发现同步 skill；已打开的对话可调用一次 `$roadmap-dashboard-sync` 接入。路线由当前 agent 在计划、交付等节点维护，不把所有消息自动转成任务；已有清单仍可在设置中选 `ledger.json` 共享。
 
 浏览器预览只使用虚构数据，不能接入真实文件。源码构建的应用和数据目录沿用 Roadmap Dashboard Preview 名称；预编译候选应用名为 Dashboard for Codex。依赖检查、手动未读、共享清单和卸载见[完整指南](docs/CONNECT.md)。
 

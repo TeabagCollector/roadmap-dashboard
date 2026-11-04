@@ -2,13 +2,13 @@
 
 ## Candidate status
 
-Version: **0.5.0-preview.1**, Apple silicon only, macOS 15+ deployment target. The candidate includes CPython 3.12.16 and requires no separate Python, Swift, API key or account. It is locally ad-hoc signed and **not notarized**. One physical Apple silicon Mac has been tested; another Mac and macOS 15 have not been tested. This is a test candidate, not a verified general release.
+Version: **0.5.0-preview.2**, Apple silicon only, macOS 15+ deployment target. The candidate includes CPython 3.12.16 and requires no separate Python, Swift, API key or account. It is locally ad-hoc signed and **not notarized**. One physical Apple silicon Mac has been tested; another Mac and macOS 15 have not been tested. This is a test candidate, not a verified general release.
 
 ## Install
 
 1. Open the disk image and copy **Dashboard for Codex.app** to Applications, or to your own `~/Applications` folder if you prefer a user-local installation. Quit any previous copy before replacing it. Keep your existing copy as a backup when testing an update.
 2. Eject the disk image, then open the installed application. The first launch should show a bilingual setup view and fictional sample tasks, without asking for an administrator password or developer tools.
-3. Choose **Connect local ChatGPT Desktop work records** in setup. A supported local record source is required for real conversations. Optionally install the roadmap skill for your coding agent. Follow [the connection guide](CONNECT.md) for manual unread and shared roadmaps.
+3. The first-run view checks the default local Codex work-data folder read-only. Click **Start tracking real work** when it is found. The visible **Also enable roadmap tracking** choice installs a separate skill in the same action; uncheck it for conversation monitoring alone. Existing skills are never overwritten. A supported local record source is required for real conversations. A missing or unsupported source is explained, with retry and folder selection available. Follow [the connection guide](CONNECT.md) for manual unread and shared roadmaps.
 
 macOS may block an application downloaded from the internet because this preview is not notarized. If you trust its source and choose to proceed, use the per-application **Open Anyway** option in System Settings → Privacy & Security, when macOS offers it. Do not disable Gatekeeper, remove quarantine recursively, or change system-wide security settings. If the application is reported as damaged or a required option is unavailable, stop and report the exact message.
 
@@ -29,9 +29,9 @@ The default data folder remains `~/Library/Application Support/RoadmapDashboardP
 
 ## 中文
 
-这是 **0.5.0-preview.1** Apple silicon 候选包，部署目标为 macOS 15+，自带 Python，不要求使用者另装 Swift 或 Python，也不要求 API Key 或新账号。已做本地临时签名，尚未公证；目前只有一台真实 Mac 的测试结果，不能据此宣称其他机器或 macOS 15 已验证。
+这是 **0.5.0-preview.2** Apple silicon 候选包，部署目标为 macOS 15+，自带 Python，不要求使用者另装 Swift 或 Python，也不要求 API Key 或新账号。已做本地临时签名，尚未公证；目前只有一台真实 Mac 的测试结果，不能据此宣称其他机器或 macOS 15 已验证。
 
-安装：打开 DMG → 把应用复制到 Applications（也可放自己的 `~/Applications`）→ 推出 DMG 后从安装位置打开。首次显示设置页和虚构样例，再自行选择是否接入本机工作记录。更新前退出旧版并保留备份。
+安装：打开 DMG → 把应用复制到 Applications（也可放自己的 `~/Applications`）→ 推出 DMG 后从安装位置打开。首次设置页会只读检测本机工作记录。找到后点击“开始追踪真实工作”；同屏可选择是否一起启用任务路线 skill。找不到时会说明原因，不显示接入成功；样例另有入口。更新前退出旧版并保留备份。
 
 下载的未公证应用可能被 macOS 拦截。如果你信任来源并决定继续，可在系统提供时使用“系统设置 → 隐私与安全性 → 仍要打开”对这一款应用单独授权。不关闭 Gatekeeper，不批量清除隔离标记，不修改系统安全策略；若显示已损坏或没有相应选项，停止并记录提示。
 
