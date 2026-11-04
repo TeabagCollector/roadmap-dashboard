@@ -7,10 +7,10 @@ ROOT = Path(__file__).resolve().parents[1]
 FILES = (
  '.gitignore','LICENSE','README.md','README.zh-CN.md','build.sh',
  'Preview English.command','预览中文版.command','Install.command',
- 'src/Monitor.swift','src/index.html','src/style.css','src/app.js',
+ 'src/roadmap-model.js','src/Monitor.swift','src/index.html','src/style.css','src/app.js',
  'src/conversation-model.js','src/connection.js','src/i18n.js','src/demo-data.js','src/preview.js',
  'sync/dashboard.py','sync/setup.py','sync/client.py','samples/demo.json',
- 'tests/test_sync.py','tests/test_setup.py','tests/test_export.py','tests/conversations.test.cjs',
+ 'tests/test_sync.py','tests/test_setup.py','tests/test_export.py','tests/conversations.test.cjs','tests/roadmaps.test.cjs',
  'scripts/export_source.py','scripts/install.py','scripts/package_macos.py','docs/INSTALL-MACOS.md','docs/CONNECT.md','docs/PRIVACY.md','docs/LANDSCAPE.md',
  'docs/preview-en.png','docs/preview-zh.png','docs/demo-en.gif','docs/demo-zh.gif','docs/DEMO.md',
  'skills/roadmap-dashboard-sync/SKILL.md',

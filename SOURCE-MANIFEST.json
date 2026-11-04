@@ -24,18 +24,18 @@
     },
     {
       "path": "README.md",
-      "bytes": 5202,
-      "sha256": "7b593fefd6847e3be47cdf94fc6936fff7414fe816c55fe55ddfaec4324fd518"
+      "bytes": 5488,
+      "sha256": "d8929aeb45eb3ca78e2b39d1f63d4c0e68af38bc36decd819cea03f76900e95e"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 4616,
-      "sha256": "cb82cec11dd42f7c98bf38cbd442f53bd2b1d53da758afaa7f6c002e3a9a7c4c"
+      "bytes": 4871,
+      "sha256": "d275534cb319b3836d48ddc5d20d5c615fa92170d8bff7ec4ec418a7f1a665b4"
     },
     {
       "path": "build.sh",
-      "bytes": 1705,
-      "sha256": "441eeaacb87bc331f8eb6a003be97409f1d4d404280dd08bfd36b2317279a8e6"
+      "bytes": 1724,
+      "sha256": "6eb57ea6d27054db4ac910678cfbe05486da5e534bf3e1daf1d86f3dccdab364"
     },
     {
       "path": "docs/CONNECT.md",
@@ -49,8 +49,8 @@
     },
     {
       "path": "docs/INSTALL-MACOS.md",
-      "bytes": 4782,
-      "sha256": "714488746db6d3ad7bfab0ec62945491a67310bb712bd75831aa53def0a520ec"
+      "bytes": 4419,
+      "sha256": "a44fd8062a6e43aa0a945793b4bc872a868a9b8d0f5beb1b074590cca812f6d4"
     },
     {
       "path": "docs/LANDSCAPE.md",
@@ -89,8 +89,8 @@
     },
     {
       "path": "scripts/export_source.py",
-      "bytes": 5337,
-      "sha256": "2a7c88b261508da82a019e937f9b6acb23abf437f71e5b1bcabb059890032ed5"
+      "bytes": 5386,
+      "sha256": "d767b56775a8331b2619c74ae31538e19f03fddf85f783ba25607db9de7ab5f6"
     },
     {
       "path": "scripts/install.py",
@@ -100,7 +100,7 @@
     {
       "path": "scripts/package_macos.py",
       "bytes": 4310,
-      "sha256": "e0d3322a31715f0c479f0eab0d96a694fb86e74e24c2422d80b0d8a765c2f0e9"
+      "sha256": "acf6f355cd5b6c31d617258af0cf8a8c4fdddbc11711c061b810622149749bb5"
     },
     {
       "path": "skills/roadmap-dashboard-sync/SKILL.md",
@@ -109,13 +109,13 @@
     },
     {
       "path": "src/Monitor.swift",
-      "bytes": 38547,
-      "sha256": "9e9cd80d5b13081825a7fc1fb606a18db0a519c4b815e557571a91299d6aef78"
+      "bytes": 44240,
+      "sha256": "4cd6c6fa8101d24a5e121f51076adb33b13b87c5f098b8c859d8ca443391e92e"
     },
     {
       "path": "src/app.js",
-      "bytes": 15300,
-      "sha256": "726ea48adab7ba3e2fbee585c25e977840db4010145790e861b1cf146c010755"
+      "bytes": 20854,
+      "sha256": "02d2ef663fd50c91a5e37c78c76f5add307ce4968f83f71bc5838121250c11bd"
     },
     {
       "path": "src/connection.js",
@@ -134,13 +134,13 @@
     },
     {
       "path": "src/i18n.js",
-      "bytes": 5690,
-      "sha256": "0824ca145d63192f79b494a1a413db3e257fd8365e8a0b00e3f0f6fdb9068b35"
+      "bytes": 6530,
+      "sha256": "2d39ae073c64cfff23a4dcccb21ca9ce0ff87512602021f4e031d161ab600b31"
     },
     {
       "path": "src/index.html",
-      "bytes": 3357,
-      "sha256": "bea67b294e0aeb5c6524bbd6bae104fda9525acf20e1ce239708e84be1be4ea8"
+      "bytes": 3639,
+      "sha256": "783cb5dcdcda578fd894f0d40d133a3796beeba3036c038b8da929ee726d19e7"
     },
     {
       "path": "src/preview.js",
@@ -148,9 +148,14 @@
       "sha256": "a5071527c9f0020f7bd6040ff55e3edd388e5b2bbc4f5642b1def2be4a9171b6"
     },
     {
+      "path": "src/roadmap-model.js",
+      "bytes": 1085,
+      "sha256": "b94f9dfacdf3a370eecd004bd341eb29844def96cffb83ba52b2e8880037ab82"
+    },
+    {
       "path": "src/style.css",
-      "bytes": 9467,
-      "sha256": "a2c6ab9bcf540cb31b914be54a2b57b7313bfaa3fbf6eb76a26e6f0285081417"
+      "bytes": 11416,
+      "sha256": "7489382b95b76a709646d8ac0593a45a24297ad55044fe8a17fd985822476d89"
     },
     {
       "path": "sync/client.py",
@@ -171,6 +176,11 @@
       "path": "tests/conversations.test.cjs",
       "bytes": 4139,
       "sha256": "a961ba1a07389dc184b3aed7b0e247a223c3b42ee8987b7dd19632526eff9872"
+    },
+    {
+      "path": "tests/roadmaps.test.cjs",
+      "bytes": 1246,
+      "sha256": "206341273dcdc49bf437302df75ac48c0459a35c4a52cf2e280f7b6d66c0748b"
     },
     {
       "path": "tests/test_export.py",

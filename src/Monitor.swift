@@ -46,7 +46,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         return args[i+1]
     }
     var ready = false
-    var qa = CommandLine.arguments.contains("--smoke")
+    var qa = CommandLine.arguments.contains("--smoke") || CommandLine.arguments.contains("--roadmap-smoke") || CommandLine.arguments.contains("--roadmap-restore")
     var restore = CommandLine.arguments.contains("--restore-smoke")
     var captureOnly = CommandLine.arguments.contains("--capture")
     var requestBusy = false
@@ -87,7 +87,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         for t in [NSWindow.ButtonType.closeButton,.miniaturizeButton,.zoomButton] { panel.standardWindowButton(t)?.isHidden = true }
         if let screen = NSScreen.main { panel.setFrameOrigin(NSPoint(x:screen.visibleFrame.maxX-422,y:screen.visibleFrame.maxY-700)) }
         if !qa && !restore && !captureOnly && !hotKeyQA { panel.setFrameAutosaveName("RoadmapDashboardPreviewV1") }
-        if CommandLine.arguments.contains("--quick-start-smoke") || CommandLine.arguments.contains("--first-launch-smoke"),let widthText=argument("--qa-width"),let width=Double(widthText),width>=320,width<=680 { panel.setContentSize(NSSize(width:width,height:660)) }
+        if CommandLine.arguments.contains("--quick-start-smoke") || CommandLine.arguments.contains("--first-launch-smoke") || CommandLine.arguments.contains("--roadmap-smoke") || CommandLine.arguments.contains("--roadmap-restore"),let widthText=argument("--qa-width"),let width=Double(widthText),width>=320,width<=680 { panel.setContentSize(NSSize(width:width,height:660)) }
         let controller = WKUserContentController()
         controller.add(self,name:"monitor")
         let configWeb = WKWebViewConfiguration()
@@ -312,6 +312,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
                 }
             }
             else if onboardingQA { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runOnboardingQA() } }
+            else if CommandLine.arguments.contains("--roadmap-smoke") || CommandLine.arguments.contains("--roadmap-restore") { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runRoadmapQA() } }
             else if qa { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runSmoke() } }
             else if restore { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runRestore() } }
             else if captureOnly { DispatchQueue.main.asyncAfter(deadline:.now()+2) { self.capture(self.language == "en" ? "preview-en.png" : "preview-zh.png") { NSApp.terminate(nil) } } }
@@ -326,7 +327,10 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
                   let completions=value["completionVersions"] as? [String:String],completions.count<=200,completions.allSatisfy({ UUID(uuidString:$0.key) != nil && $0.value.count<=100 }) else { return }
             language=value["language"] as? String == "en" ? "en" : "zh"
             updateMenuLanguage()
-            let clean:[String:Any]=["version":1,"theme":theme,"conversationHeight":height,"hideCompleted":value["hideCompleted"] as? Bool ?? false,"language":value["language"] as? String == "en" ? "en" : "zh","conversationOrder":order,"completionVersions":completions]
+            let taskOrder=(value["taskOrder"] as? [String] ?? []).filter { !$0.isEmpty && $0.count<=160 }.prefix(500)
+            let taskOpen=(value["expandedTasks"] as? [String:Bool] ?? [:]).filter { !$0.key.isEmpty && $0.key.count<=160 }
+            let stepLimit=value["stepLimit"] as? Int ?? 5
+            let clean:[String:Any]=["taskOrder":Array(taskOrder),"expandedTasks":taskOpen.count<=500 ? taskOpen : [:],"compactOverview":value["compactOverview"] as? Bool ?? false,"hideCompletedSteps":value["hideCompletedSteps"] as? Bool ?? true,"stepLimit":[0,3,5,8].contains(stepLimit) ? stepLimit : 5,"version":1,"theme":theme,"conversationHeight":height,"hideCompleted":value["hideCompleted"] as? Bool ?? false,"language":value["language"] as? String == "en" ? "en" : "zh","conversationOrder":order,"completionVersions":completions]
             do {
                 let data=try JSONSerialization.data(withJSONObject:clean)
                 let url=dataRoot.appendingPathComponent("panel-preferences.json")
@@ -404,6 +408,39 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         web.takeSnapshot(with:nil) { image,error in
             if let image=image,let tiff=image.tiffRepresentation,let bitmap=NSBitmapImageRep(data:tiff),let png=bitmap.representation(using:.png,properties:[:]) { try? png.write(to:self.reportRoot.appendingPathComponent(name),options:.atomic) }
             completion()
+        }
+    }
+    func runRoadmapQA() {
+        timer?.invalidate()
+        let restore=CommandLine.arguments.contains("--roadmap-restore")
+        let script="""
+        (()=>{const check=(v,m)=>{if(!v)throw Error(m)};
+        const f=structuredClone(DASHBOARD_DEMO);f.capturedAt=new Date().toISOString();f.ledger.revision=100;
+        f.ledger.tasks=[{id:'long',title:'Sixteen-step task',project:'Example',defaultExpanded:true,steps:Array.from({length:16},(_,i)=>({id:'s'+i,text:'Step '+i,done:i<4,reported:i===4?'in_progress':'pending'}))},{id:'second',title:'Second task',project:'Example',steps:[{id:'one',text:'One',done:false}]},{id:'third',title:'Third task',project:'Example',steps:[{id:'one',text:'One',done:false}]}];
+        window.centralLoadSnapshot(f);
+        const long=()=>document.querySelector('[data-id=long]');
+        if(\(restore ? "true":"false")){
+          check(document.querySelector('.task').dataset.id==='second','order restored');
+          check(document.querySelectorAll('.task.compact').length===3,'compact restored');check(!long().querySelector('.roadmap').hidden,'expanded task restored');
+          document.querySelector('#list-options').click();check(document.querySelector('#step-limit').value==='3','limit restored');document.querySelector('#list-options').click();
+          return {restored:true,order:true,compact:true,limit:true};
+        }
+        window.centralLoadPreferences({language:'en',theme:'warm',conversationHeight:200,hideCompleted:false,taskOrder:[],compactOverview:false,hideCompletedSteps:true,stepLimit:5,expandedTasks:{}});
+        check(long().querySelectorAll('.step').length===5,'initial cap');check(!long().querySelector('.step.done'),'completed hidden');
+        long().querySelector('.more-steps').click();check(long().querySelectorAll('.step').length===12,'show remaining');long().querySelector('.more-steps').click();
+        long().querySelector('.step-visibility').click();check(long().querySelector('.step.done'),'completed can be shown');long().querySelector('.step-visibility').click();
+        document.querySelector('#list-options').click();const choices=document.querySelectorAll('.display-choice input');choices[0].click();check(long().querySelector('.roadmap').hidden,'overview collapsed');document.querySelector('#task-sort').click();check(document.querySelector('#task-sort').getAttribute('aria-pressed')==='true','sort entry visible');
+        document.querySelector('[data-id=second] .move-task').click();check(document.querySelector('.task').dataset.id==='second','manual move');
+        const dt=new DataTransfer();document.querySelector('[data-id=third] .drag-handle').dispatchEvent(new DragEvent('dragstart',{bubbles:true,dataTransfer:dt}));const drop=document.querySelector('[data-id=second]');drop.dispatchEvent(new DragEvent('drop',{bubbles:true,cancelable:true,dataTransfer:dt,clientY:drop.getBoundingClientRect().top+1}));check(document.querySelector('.task').dataset.id==='third','drag order');document.querySelector('[data-id=third] .drag-handle').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true}));check(document.querySelector('.task').dataset.id==='second','keyboard order');
+        const select=document.querySelector('#step-limit');select.value='3';select.dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('#list-options').click();
+        long().querySelector('.task-toggle').click();check(long().querySelectorAll('.step').length===3,'new cap');
+        const before=f.ledger.tasks.map(t=>t.steps.map(s=>s.done));f.ledger.revision++;window.centralLoadSnapshot(f);check(document.querySelector('.task').dataset.id==='second','refresh preserves order');check(JSON.stringify(before)===JSON.stringify(f.ledger.tasks.map(t=>t.steps.map(s=>s.done))),'record unchanged');
+        document.querySelector('#language').click();document.querySelector('#list-options').click();check(document.querySelector('#list-display-panel').textContent.includes('紧凑概览'),'Chinese view settings');document.querySelector('#list-options').click();
+        return {cap:true,showAll:true,hideCompleted:true,overview:true,manualMove:true,dragEvents:true,keyboardMove:true,stableRefresh:true,recordUnchanged:true,bilingual:true,overflow:document.documentElement.scrollWidth>innerWidth};})();
+        """
+        web.evaluateJavaScript(script) { value,error in
+            self.writeReport(["checks":value ?? NSNull(),"error":error?.localizedDescription ?? NSNull(),"detail":(error as NSError?)?.userInfo["WKJavaScriptExceptionMessage"] ?? NSNull()],restore ? "roadmap-restore.json":"roadmap-controls.json")
+            self.capture("roadmap-controls.png") { NSApp.terminate(nil) }
         }
     }
     func runQuickStartQA() {

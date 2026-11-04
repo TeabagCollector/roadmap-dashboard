@@ -7,7 +7,7 @@ python3 - "$project_root" "$app" <<'PY'
 import sys,shutil,plistlib
 from pathlib import Path
 root,app=map(Path,sys.argv[1:])
-for name in ('index.html','style.css','conversation-model.js','i18n.js','connection.js','app.js','demo-data.js','preview.js'):shutil.copyfile(root/'src'/name,app/'Contents/Resources/ui'/name)
+for name in ('index.html','style.css','conversation-model.js','i18n.js','connection.js','app.js','roadmap-model.js','demo-data.js','preview.js'):shutil.copyfile(root/'src'/name,app/'Contents/Resources/ui'/name)
 for name in ('dashboard.py','setup.py','client.py'):shutil.copyfile(root/'sync'/name,app/'Contents/Resources/runtime/sync'/name)
 shutil.copytree(root/'skills',app/'Contents/Resources/runtime/skills',dirs_exist_ok=True)
 for cache in (app/'Contents/Resources/runtime').rglob('__pycache__'):shutil.rmtree(cache)

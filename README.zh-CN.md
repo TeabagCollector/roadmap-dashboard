@@ -22,11 +22,11 @@ An independent macOS companion for local work in ChatGPT Desktop.
 - **路线：** 展开任务查看步骤、进度与证据，返回关联的本机工作对话。
 - **完成：** agent 上报交付后仍待核验，验证或由你勾选后才算完成。保留手动完成与重新打开的选择。
 
-对话区和清单区可拖动调整、独立滚动；支持五种主题和中英界面切换。
+对话区和清单区可拖动调整、独立滚动；支持五种主题和中英界面切换。“我的清单”旁直接点 **排序** 调整顺序，**显示** 可选紧凑概览、隐藏已完成步骤及 3 / 5 / 8 / 不限的条数，重启保留设置。普通安装只需下载 → 拖入 Applications → 打开接入，SHA256 校验可选。
 
 ## 三步入门
 
-**Apple silicon 应用测试预览：** [下载 v0.5.0-preview.2](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.2)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截，第二台真实 Mac 仍待验证。请先阅读[安装与测试说明](docs/INSTALL-MACOS.md)。
+**Apple silicon 应用测试预览：** [下载 v0.5.0-preview.3](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.3)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截，第二台真实 Mac 仍待验证。请先阅读[安装与测试说明](docs/INSTALL-MACOS.md)。
 
 如果选择**源码安装**，需要 macOS 15+、Swift 6 命令行工具和 Python 3.9+。
 
