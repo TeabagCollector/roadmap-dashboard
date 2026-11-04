@@ -12,11 +12,37 @@ FILES = (
  'sync/dashboard.py','sync/setup.py','sync/client.py','samples/demo.json',
  'tests/test_sync.py','tests/test_setup.py','tests/test_export.py','tests/conversations.test.cjs',
  'scripts/export_source.py','scripts/install.py','docs/CONNECT.md','docs/PRIVACY.md','docs/LANDSCAPE.md',
- 'docs/preview-en.png','docs/preview-zh.png',
+ 'docs/preview-en.png','docs/preview-zh.png','docs/demo-en.gif','docs/demo-zh.gif','docs/DEMO.md',
  'skills/roadmap-dashboard-sync/SKILL.md',
 )
 
 def scan_bytes(name, data):
+    if name.endswith('.gif'):
+        if not data.startswith((b'GIF87a',b'GIF89a')): raise ValueError('Not a GIF: '+name)
+        # Only graphics/control blocks and the standard loop extension belong
+        # in the rendered walkthrough; reject embedded text or custom metadata.
+        offset=13
+        if data[10]&128: offset+=3*(2**((data[10]&7)+1))
+        def blocks(pos):
+            while True:
+                length=data[pos];pos+=1
+                if not length:return pos
+                pos+=length
+                if pos>len(data):raise ValueError('Truncated GIF: '+name)
+        while offset<len(data):
+            marker=data[offset];offset+=1
+            if marker==0x3b:return
+            if marker==0x21:
+                kind=data[offset];offset+=1
+                if kind==0xff and data[offset+1:offset+12]!=b'NETSCAPE2.0':raise ValueError('GIF metadata: '+name)
+                if kind not in (0xf9,0xff):raise ValueError('GIF text metadata: '+name)
+                offset=blocks(offset)
+            elif marker==0x2c:
+                flags=data[offset+8];offset+=9
+                if flags&128:offset+=3*(2**((flags&7)+1))
+                offset=blocks(offset+1)
+            else:raise ValueError('Invalid GIF block: '+name)
+        raise ValueError('Missing GIF trailer: '+name)
     if name.endswith('.png'):
         # Only decoded native demo screenshots enter this allowlist. PNG text
         # metadata, if present, is rejected rather than treated as a photograph.

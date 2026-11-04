@@ -5,6 +5,10 @@ class ExportTests(unittest.TestCase):
   samples=['/'+ 'Users/'+ 'someone/private', 'sk'+'-'+ 'a'*24,'12345678-'+'1234-7123-8123-123456789012']
   for sample in samples:
    with self.assertRaises(ValueError):e.scan_bytes('canary.txt',sample.encode())
+ def test_walkthrough_rejects_text_metadata(self):
+  clean=(e.ROOT/'docs/demo-en.gif').read_bytes()
+  e.scan_bytes('demo.gif',clean)
+  with self.assertRaises(ValueError):e.scan_bytes('demo.gif',clean[:-1]+b'\x21\xfe\x06secret\x00\x3b')
  def test_allowlist_excludes_runtime_canary(self):
   with tempfile.TemporaryDirectory() as tmp:
    root=pathlib.Path(tmp)/'source';root.mkdir()

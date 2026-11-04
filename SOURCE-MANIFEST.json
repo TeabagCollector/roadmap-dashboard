@@ -24,13 +24,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 2787,
-      "sha256": "953809217b70350140bfdf1c090b62f0cbd9639f13d0817bc1d26d039d9bca23"
+      "bytes": 4557,
+      "sha256": "176f5aaf0d1765f9e5d5051a4e179e119ed2b7f255878be9fe448356eab5af6c"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 2359,
-      "sha256": "124212df437cf8b419bfc2eb345c3d27971b9e77ac876ff27445372403c8dc9b"
+      "bytes": 4001,
+      "sha256": "13e5c3f6e9ce4d32291ed4c3b79ba40aeda72bd91a820c9e8270555a1e45f111"
     },
     {
       "path": "build.sh",
@@ -43,6 +43,11 @@
       "sha256": "ffb2e40baa45f4fd8f49249d6c330b96920458e51870c761de14e946c18ee2e7"
     },
     {
+      "path": "docs/DEMO.md",
+      "bytes": 1990,
+      "sha256": "7acc3c42281913368dc9ac563fe5b44ca13ade80c26469492a07640eb4ad823c"
+    },
+    {
       "path": "docs/LANDSCAPE.md",
       "bytes": 2231,
       "sha256": "924ac7fe92a20297041523d40454be4b0e90756b90e3437eff9841a026b774cb"
@@ -53,14 +58,24 @@
       "sha256": "71ca64a00205b21ff8cb1d098bbf98f28fe10f0f4557458333e3abf467d63b5c"
     },
     {
+      "path": "docs/demo-en.gif",
+      "bytes": 69687,
+      "sha256": "a747d2c47e0eebc00fa21533daa489a1a3c8c68ed27ea7cb5c1360bc9c1c1e4a"
+    },
+    {
+      "path": "docs/demo-zh.gif",
+      "bytes": 64756,
+      "sha256": "f0608babb26ec735932c6204751f5d78039c35e46d96ee7f8361795994035500"
+    },
+    {
       "path": "docs/preview-en.png",
-      "bytes": 138806,
-      "sha256": "7e4a59a9b5bb94406a470663adc6d253713a25e2a67d425dd79ede3dd4236b76"
+      "bytes": 215058,
+      "sha256": "040931e6cc941dc7f763c5120f9776ad5228ebad68c9124dae6a7e160a1d4120"
     },
     {
       "path": "docs/preview-zh.png",
-      "bytes": 137802,
-      "sha256": "7b53c98aa1bb596d311b24c50db50d209284e7d9afac24fb19bf00a95b7d654e"
+      "bytes": 216045,
+      "sha256": "b052b99bbd8d397d839b7001b4ac9daac43f7f84a08131fbdbd92447a8e4a0fa"
     },
     {
       "path": "samples/demo.json",
@@ -69,8 +84,8 @@
     },
     {
       "path": "scripts/export_source.py",
-      "bytes": 3930,
-      "sha256": "ff8bee8e026fefdeb5601c3afce24f3d67dc23a65835b36a59d08b3e08528a6a"
+      "bytes": 5286,
+      "sha256": "2bfeeb13ed2c04669d1b37d24e921edcf9cba129528978515b019187c46f81b6"
     },
     {
       "path": "scripts/install.py",
@@ -149,8 +164,8 @@
     },
     {
       "path": "tests/test_export.py",
-      "bytes": 1492,
-      "sha256": "badb497d415d2d1a74d2612f81756ac5f1fd8aaa943626429f79d65e19b23ffe"
+      "bytes": 1728,
+      "sha256": "435a03d9fee1e7be71f2ea67f236d3ac0fab9d51b594ef3b9fa55c877583922f"
     },
     {
       "path": "tests/test_setup.py",
