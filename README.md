@@ -30,7 +30,7 @@ The panel has independently scrollable sections, a draggable divider, five theme
 
 For a **source installation**, you need macOS 15+, Swift 6 command-line tools and Python 3.9+.
 
-1. **Install.** [Download the source preview](https://github.com/TeabagCollector/roadmap-dashboard/releases/latest), extract it, and run `Install.command`. For a no-install look, open `src/index.html` in a browser.
+1. **Install.** [Download the source preview](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.4), extract it, and run `Install.command`. For a no-install look, open `src/index.html` in a browser.
 2. **Start tracking.** On first launch, the app checks the default local Codex work-data folder. When found, click **Start tracking real work**. Leave **Also enable roadmap tracking** selected to install the separate sync skill in the same action. No login or API key is needed. If nothing is found, start a local work chat in Codex or choose its data folder.
 3. **Do real work.** Existing local conversation status appears after connection. Start a new supported Codex work chat with a concrete task so it can discover the installed roadmap skill. For an already-open chat, invoke `$roadmap-dashboard-sync` once. The working agent maintains the roadmap at plan and delivery checkpoints; the panel does not invent tasks from every message. An existing `ledger.json` can still be shared from setup.
 
