@@ -26,13 +26,15 @@ The panel has independently scrollable sections, a draggable divider, five theme
 
 ## Get started in three steps
 
-This release is a **source preview**. Native installation requires macOS 15+, Swift 6 command-line tools and Python 3.9+. A prebuilt, notarized download is not available yet.
+**Apple silicon app preview:** [download v0.5.0-preview.1](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.1). The app includes Python and does not require developer tools. It is **not notarized**; macOS may block first launch. Another physical Mac has not yet been verified. Read [installation and test instructions](docs/INSTALL-MACOS.md).
+
+For a **source installation**, you need macOS 15+, Swift 6 command-line tools and Python 3.9+.
 
 1. **Install.** [Download the source preview](https://github.com/TeabagCollector/roadmap-dashboard/releases/latest), extract it, and run `Install.command`. For a no-install look, open `src/index.html` in a browser.
 2. **Connect.** Open the native app's gear button and select **Connect local ChatGPT Desktop work records**. Start with a new roadmap, or choose **Share an existing roadmap** if you already have a `ledger.json`.
 3. **Track a real task.** In setup, optionally choose **Install roadmap skill**. Start a new supported agent chat and invoke `$roadmap-dashboard-sync` with a concrete task. The agent maintains the plan at meaningful checkpoints; use the panel to inspect progress and check results.
 
-The browser preview uses fictional data and cannot connect real files. The native application and data directory keep their existing Roadmap Dashboard Preview names in this release. See the [full setup and removal guide](docs/CONNECT.md) for dependency checks, manual unread setup, shared roadmaps and troubleshooting.
+The browser preview uses fictional data and cannot connect real files. The source-built application and data directory retain their existing Roadmap Dashboard Preview names; the prebuilt candidate is named Dashboard for Codex. See the [full setup and removal guide](docs/CONNECT.md) for dependency checks, manual unread setup, shared roadmaps and troubleshooting.
 
 ## How synchronization works
 

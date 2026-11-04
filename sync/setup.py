@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Explicit local setup. No auth-file reads, source writes, hooks or network."""
-import contextlib,copy,json,os,sqlite3,sys
+import contextlib,copy,json,os,sqlite3,sys,shlex
 from pathlib import Path
 sys.dont_write_bytecode=True
 import dashboard as d
@@ -78,7 +78,7 @@ def action(request,base):
         script='import sys\nsys.dont_write_bytecode=True\nfrom pathlib import Path\nsys.path.insert(0,'+repr(str(root))+')\nimport client\nclient.main(base=Path('+repr(str(base))+'))\n'
         (folder/'dashboard_client.py').write_text(script)
         template=(root.parent/'skills/roadmap-dashboard-sync/SKILL.md').read_text()
-        template+='\n'+marker+'\n\nInstalled local client: `python3 "'+str(folder/'dashboard_client.py')+'" request`. Pass request JSON on stdin. `status` reveals the current task directory. This local path is private installation metadata, never part of a public source archive.\n'
+        template+='\n'+marker+'\n\nInstalled local client: `'+shlex.quote(sys.executable)+' '+shlex.quote(str(folder/'dashboard_client.py'))+' request`. Pass request JSON on stdin. `status` reveals the current task directory. This local path is private installation metadata, never part of a public source archive.\n'
         path.write_text(template)
         for p in [path,folder/'dashboard_client.py']:os.chmod(p,0o600)
         d.atomic(base/'tracking-installation.json',{'path':str(path),'installedAt':d.stamp()})

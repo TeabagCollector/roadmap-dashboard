@@ -66,6 +66,8 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         if let data=try? Data(contentsOf:baseRoot.appendingPathComponent("connection.json")),let value=(try? JSONSerialization.jsonObject(with:data)) as? [String:Any] { connection=value }
         if !qa && !restore && !captureOnly && !CommandLine.arguments.contains("--demo") { liveMode=liveMode || connection["enabled"] as? Bool == true }
         if let data=try? Data(contentsOf:baseRoot.appendingPathComponent("installation.json")),let value=(try? JSONSerialization.jsonObject(with:data)) as? [String:Any],let installed=value["python"] as? String,FileManager.default.isExecutableFile(atPath:installed) { python=installed }
+        let bundledPython=resources.appendingPathComponent("python/bin/python3")
+        if FileManager.default.isExecutableFile(atPath:bundledPython.path) { python=bundledPython.path }
         if let location=argument("--data") { dataRoot=URL(fileURLWithPath:location,isDirectory:true) }
         else { dataRoot=baseRoot.appendingPathComponent(liveMode ? "live" : "demo",isDirectory:true) }
         try? FileManager.default.createDirectory(at:dataRoot,withIntermediateDirectories:true,attributes:[.posixPermissions:0o700])
@@ -230,7 +232,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
             if let home=connection["codexHome"] as? String { p.arguments! += ["--codex-home",home] }
             if let ledger=connection["ledgerDirectory"] as? String { p.arguments! += ["--ledger-data",ledger] }
         }
-        var env=ProcessInfo.processInfo.environment;env["PYTHONDONTWRITEBYTECODE"]="1";p.environment=env
+        var env=ProcessInfo.processInfo.environment;env["PYTHONDONTWRITEBYTECODE"]="1";env["PYTHONNOUSERSITE"]="1";env.removeValue(forKey:"PYTHONHOME");env.removeValue(forKey:"PYTHONPATH");p.environment=env
         p.currentDirectoryURL=root
         p.standardError=FileHandle.nullDevice
         return p
@@ -297,7 +299,15 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
             ready=true;loadSnapshot()
             if !liveMode && !qa && !restore && !captureOnly && !hotKeyQA && !onboardingQA && connection.isEmpty { web.evaluateJavaScript("window.centralOpenSetup()",completionHandler:nil) }
             writeReport(["level":panel.level.rawValue,"normalWindow":panel.level == .normal,"commandD":"bring-front-if-covered;hide-if-already-active"],"window-mode.json")
-            if onboardingQA { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runOnboardingQA() } }
+            if CommandLine.arguments.contains("--first-launch-smoke") {
+                DispatchQueue.main.asyncAfter(deadline:.now()+1) {
+                    self.web.evaluateJavaScript("({setupVisible:!document.getElementById('connection-panel').hidden,language:document.documentElement.lang,demo:document.getElementById('sync-time').textContent.includes('sample'),tasks:document.querySelectorAll('.task').length})") { result,error in
+                        self.writeReport(["ui":result ?? NSNull(),"error":error?.localizedDescription ?? NSNull(),"bundledPython":self.python.hasPrefix(Bundle.main.resourceURL!.path)],"first-launch.json")
+                        NSApp.terminate(nil)
+                    }
+                }
+            }
+            else if onboardingQA { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runOnboardingQA() } }
             else if qa { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runSmoke() } }
             else if restore { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runRestore() } }
             else if captureOnly { DispatchQueue.main.asyncAfter(deadline:.now()+2) { self.capture(self.language == "en" ? "preview-en.png" : "preview-zh.png") { NSApp.terminate(nil) } } }
@@ -356,7 +366,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         let process=Process(),input=Pipe(),output=Pipe()
         process.executableURL=URL(fileURLWithPath:"/usr/bin/env")
         process.arguments=[python,root.appendingPathComponent("sync/setup.py").path,"--base",baseRoot.path]
-        var env=ProcessInfo.processInfo.environment;env["PYTHONDONTWRITEBYTECODE"]="1";process.environment=env
+        var env=ProcessInfo.processInfo.environment;env["PYTHONDONTWRITEBYTECODE"]="1";env["PYTHONNOUSERSITE"]="1";env.removeValue(forKey:"PYTHONHOME");env.removeValue(forKey:"PYTHONPATH");process.environment=env
         process.standardInput=input;process.standardOutput=output;process.standardError=FileHandle.nullDevice
         do { try process.run();input.fileHandleForWriting.write(inputData);try? input.fileHandleForWriting.close() }
         catch { setupBusy=false;call("centralConnectionResult",["ok":false,"error":"python-unavailable"]);return }

@@ -11,7 +11,7 @@ FILES = (
  'src/conversation-model.js','src/connection.js','src/i18n.js','src/demo-data.js','src/preview.js',
  'sync/dashboard.py','sync/setup.py','sync/client.py','samples/demo.json',
  'tests/test_sync.py','tests/test_setup.py','tests/test_export.py','tests/conversations.test.cjs',
- 'scripts/export_source.py','scripts/install.py','docs/CONNECT.md','docs/PRIVACY.md','docs/LANDSCAPE.md',
+ 'scripts/export_source.py','scripts/install.py','scripts/package_macos.py','docs/INSTALL-MACOS.md','docs/CONNECT.md','docs/PRIVACY.md','docs/LANDSCAPE.md',
  'docs/preview-en.png','docs/preview-zh.png','docs/demo-en.gif','docs/demo-zh.gif','docs/DEMO.md',
  'skills/roadmap-dashboard-sync/SKILL.md',
 )

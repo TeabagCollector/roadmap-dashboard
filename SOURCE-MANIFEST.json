@@ -24,13 +24,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 4557,
-      "sha256": "176f5aaf0d1765f9e5d5051a4e179e119ed2b7f255878be9fe448356eab5af6c"
+      "bytes": 4898,
+      "sha256": "42b3466f743538dabb9a3db46adbb5f22b29a516685f041aad186941f7c89ac3"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 4001,
-      "sha256": "13e5c3f6e9ce4d32291ed4c3b79ba40aeda72bd91a820c9e8270555a1e45f111"
+      "bytes": 4328,
+      "sha256": "e7cc5fc0991063897d2734de123402d995f153d2ffe2b12acaf8adec09185000"
     },
     {
       "path": "build.sh",
@@ -46,6 +46,11 @@
       "path": "docs/DEMO.md",
       "bytes": 1990,
       "sha256": "7acc3c42281913368dc9ac563fe5b44ca13ade80c26469492a07640eb4ad823c"
+    },
+    {
+      "path": "docs/INSTALL-MACOS.md",
+      "bytes": 4362,
+      "sha256": "3bd01ab82dab090174552c56a25eea631dcc89fed5e2af67e56b089e2d11aaaf"
     },
     {
       "path": "docs/LANDSCAPE.md",
@@ -84,13 +89,18 @@
     },
     {
       "path": "scripts/export_source.py",
-      "bytes": 5286,
-      "sha256": "2bfeeb13ed2c04669d1b37d24e921edcf9cba129528978515b019187c46f81b6"
+      "bytes": 5337,
+      "sha256": "2a7c88b261508da82a019e937f9b6acb23abf437f71e5b1bcabb059890032ed5"
     },
     {
       "path": "scripts/install.py",
       "bytes": 3672,
       "sha256": "86204a5cb8e678da3b31f42ae45e67723edf7984f7ce47750eda76e47ac84938"
+    },
+    {
+      "path": "scripts/package_macos.py",
+      "bytes": 4310,
+      "sha256": "5ae786c437763c27b971fe629aef22e30c45c77c648031888d20b38dea6821fe"
     },
     {
       "path": "skills/roadmap-dashboard-sync/SKILL.md",
@@ -99,8 +109,8 @@
     },
     {
       "path": "src/Monitor.swift",
-      "bytes": 34577,
-      "sha256": "b22770498a0e73046677f5e8d1666466cd8fa9236647f49404226a037bdb7309"
+      "bytes": 35713,
+      "sha256": "8d064e04bcb40c738f5645699ec358e9c65096f65699fe167f14a4ee68a41c41"
     },
     {
       "path": "src/app.js",
@@ -154,8 +164,8 @@
     },
     {
       "path": "sync/setup.py",
-      "bytes": 7207,
-      "sha256": "0b0fc0c24ea0d59c2d4b04299999a7b94b3ba4718b8ee9dd667315ca68704c9a"
+      "bytes": 7248,
+      "sha256": "77bcc2a11fbf588054588b7841f4b91d512b21d295197198cb15b1f2e5e35b5a"
     },
     {
       "path": "tests/conversations.test.cjs",
