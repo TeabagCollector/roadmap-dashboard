@@ -4,7 +4,7 @@ A compact macOS companion for **ChatGPT Desktop**, bringing local work conversat
 
 [简体中文](README.zh-CN.md) · [Setup guide](docs/CONNECT.md) · [Data handling](docs/PRIVACY.md)
 
-![Roadmap Dashboard in English](docs/preview-en.png)
+<a href="docs/preview-en.png"><img src="docs/preview-en.png" alt="Roadmap Dashboard in English" width="340"></a>
 
 ## What it does
 

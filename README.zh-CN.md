@@ -4,7 +4,7 @@
 
 [English](README.md) · [安装与接入](docs/CONNECT.md) · [数据读写](docs/PRIVACY.md)
 
-![Dashboard 中文界面](docs/preview-zh.png)
+<a href="docs/preview-zh.png"><img src="docs/preview-zh.png" alt="Dashboard 中文界面" width="340"></a>
 
 ## 功能
 

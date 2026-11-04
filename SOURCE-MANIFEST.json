@@ -24,13 +24,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 2727,
-      "sha256": "67b9ba2792e0d4a334888bc1adf737b740196be61f9d2a8b47886cbf0ec931f0"
+      "bytes": 2787,
+      "sha256": "953809217b70350140bfdf1c090b62f0cbd9639f13d0817bc1d26d039d9bca23"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 2299,
-      "sha256": "69670459280b0f9d467c945697b6cd8ef424a8aa9a44f1a6017e16676591f576"
+      "bytes": 2359,
+      "sha256": "124212df437cf8b419bfc2eb345c3d27971b9e77ac876ff27445372403c8dc9b"
     },
     {
       "path": "build.sh",
