@@ -46,7 +46,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         return args[i+1]
     }
     var ready = false
-    var qa = CommandLine.arguments.contains("--smoke") || CommandLine.arguments.contains("--roadmap-smoke") || CommandLine.arguments.contains("--roadmap-restore")
+    var qa = CommandLine.arguments.contains("--focus-tools-smoke") || CommandLine.arguments.contains("--focus-tools-restore") || CommandLine.arguments.contains("--disclosure-smoke") || CommandLine.arguments.contains("--native-pointer-smoke") || CommandLine.arguments.contains("--sort-motion-smoke") || CommandLine.arguments.contains("--smoke") || CommandLine.arguments.contains("--roadmap-smoke") || CommandLine.arguments.contains("--roadmap-restore")
     var restore = CommandLine.arguments.contains("--restore-smoke")
     var captureOnly = CommandLine.arguments.contains("--capture")
     var requestBusy = false
@@ -87,7 +87,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         for t in [NSWindow.ButtonType.closeButton,.miniaturizeButton,.zoomButton] { panel.standardWindowButton(t)?.isHidden = true }
         if let screen = NSScreen.main { panel.setFrameOrigin(NSPoint(x:screen.visibleFrame.maxX-422,y:screen.visibleFrame.maxY-700)) }
         if !qa && !restore && !captureOnly && !hotKeyQA { panel.setFrameAutosaveName("RoadmapDashboardPreviewV1") }
-        if CommandLine.arguments.contains("--quick-start-smoke") || CommandLine.arguments.contains("--first-launch-smoke") || CommandLine.arguments.contains("--roadmap-smoke") || CommandLine.arguments.contains("--roadmap-restore"),let widthText=argument("--qa-width"),let width=Double(widthText),width>=320,width<=680 { panel.setContentSize(NSSize(width:width,height:660)) }
+        if CommandLine.arguments.contains("--quick-start-smoke") || CommandLine.arguments.contains("--first-launch-smoke") || CommandLine.arguments.contains("--roadmap-smoke") || CommandLine.arguments.contains("--roadmap-restore") || CommandLine.arguments.contains("--sort-motion-smoke") || CommandLine.arguments.contains("--native-pointer-smoke") || CommandLine.arguments.contains("--disclosure-smoke") || CommandLine.arguments.contains("--focus-tools-smoke") || CommandLine.arguments.contains("--focus-tools-restore"),let widthText=argument("--qa-width"),let width=Double(widthText),width>=320,width<=680 { panel.setContentSize(NSSize(width:width,height:660)) }
         let controller = WKUserContentController()
         controller.add(self,name:"monitor")
         let configWeb = WKWebViewConfiguration()
@@ -312,6 +312,10 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
                 }
             }
             else if onboardingQA { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runOnboardingQA() } }
+            else if CommandLine.arguments.contains("--focus-tools-smoke") || CommandLine.arguments.contains("--focus-tools-restore") { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runFocusToolsQA() } }
+            else if CommandLine.arguments.contains("--disclosure-smoke") { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runDisclosureQA() } }
+            else if CommandLine.arguments.contains("--native-pointer-smoke") { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runNativePointerQA() } }
+            else if CommandLine.arguments.contains("--sort-motion-smoke") { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runSortMotionQA() } }
             else if CommandLine.arguments.contains("--roadmap-smoke") || CommandLine.arguments.contains("--roadmap-restore") { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runRoadmapQA() } }
             else if qa { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runSmoke() } }
             else if restore { DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runRestore() } }
@@ -330,7 +334,8 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
             let taskOrder=(value["taskOrder"] as? [String] ?? []).filter { !$0.isEmpty && $0.count<=160 }.prefix(500)
             let taskOpen=(value["expandedTasks"] as? [String:Bool] ?? [:]).filter { !$0.key.isEmpty && $0.key.count<=160 }
             let stepLimit=value["stepLimit"] as? Int ?? 5
-            let clean:[String:Any]=["taskOrder":Array(taskOrder),"expandedTasks":taskOpen.count<=500 ? taskOpen : [:],"compactOverview":value["compactOverview"] as? Bool ?? false,"hideCompletedSteps":value["hideCompletedSteps"] as? Bool ?? true,"stepLimit":[0,3,5,8].contains(stepLimit) ? stepLimit : 5,"version":1,"theme":theme,"conversationHeight":height,"hideCompleted":value["hideCompleted"] as? Bool ?? false,"language":value["language"] as? String == "en" ? "en" : "zh","conversationOrder":order,"completionVersions":completions]
+            let requestedSize=value["textSize"] as? String ?? "standard"
+            let clean:[String:Any]=["textSize":["small","standard","large"].contains(requestedSize) ? requestedSize : "standard","taskOrder":Array(taskOrder),"expandedTasks":taskOpen.count<=500 ? taskOpen : [:],"compactOverview":value["compactOverview"] as? Bool ?? false,"hideCompletedSteps":value["hideCompletedSteps"] as? Bool ?? true,"stepLimit":[0,3,5,8].contains(stepLimit) ? stepLimit : 5,"version":1,"theme":theme,"conversationHeight":height,"hideCompleted":value["hideCompleted"] as? Bool ?? false,"language":value["language"] as? String == "en" ? "en" : "zh","conversationOrder":order,"completionVersions":completions]
             do {
                 let data=try JSONSerialization.data(withJSONObject:clean)
                 let url=dataRoot.appendingPathComponent("panel-preferences.json")
@@ -410,6 +415,137 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
             completion()
         }
     }
+    func runFocusToolsQA() {
+        timer?.invalidate();panel.makeKeyAndOrderFront(nil);NSApp.activate(ignoringOtherApps:true)
+        let restore=CommandLine.arguments.contains("--focus-tools-restore")
+        let prep="""
+        const f=structuredClone(DASHBOARD_DEMO);f.capturedAt=new Date().toISOString();f.ledger.revision=100;f.ledger.tasks=[{id:'a',title:'Design notes',project:'Notebook',steps:[{id:'one',text:'A step',done:false}]},{id:'b',title:'Photo import',project:'Studio 工作',steps:[{id:'one',text:'A step',done:false}]},{id:'c',title:'Website polish',project:'Website',steps:[{id:'one',text:'A step',done:false}]}];centralLoadSnapshot(f);
+        """
+        web.evaluateJavaScript(prep) { _,error in
+            if restore {
+                self.web.evaluateJavaScript("({font:parseFloat(getComputedStyle(document.querySelector('.task-title')).fontSize),titleFont:parseFloat(getComputedStyle(document.querySelector('h1')).fontSize),searchClosed:document.querySelector('#task-search-row').hidden,order:[...document.querySelectorAll('.task[data-id]')].map(n=>n.dataset.id)})") { value,error in
+                    let report:[String:Any]=["restored":value ?? NSNull(),"error":error?.localizedDescription as Any? ?? NSNull()];self.writeReport(report,"focus-tools-restore.json");NSApp.terminate(nil)
+                };return
+            }
+            self.web.evaluateJavaScript("centralLoadPreferences({language:'en',theme:'warm',conversationHeight:150,compactOverview:true,taskOrder:['c','a','b'],textSize:'standard',hideCompleted:false,expandedTasks:{}});window.focusKeyTrace=[];window.addEventListener('keydown',e=>focusKeyTrace.push({key:e.key,trusted:e.isTrusted,meta:e.metaKey}));") { _,_ in
+                func key(_ character:String,_ code:UInt16,_ command:Bool=false){
+                    if let event=NSEvent.keyEvent(with:.keyDown,location:.zero,modifierFlags:command ? [.command]:[],timestamp:ProcessInfo.processInfo.systemUptime,windowNumber:self.panel.windowNumber,context:nil,characters:character,charactersIgnoringModifiers:character,isARepeat:false,keyCode:code){self.panel.sendEvent(event)}
+                }
+                self.panel.makeFirstResponder(self.web);key("f",3,true)
+                DispatchQueue.main.asyncAfter(deadline:.now()+0.15) {
+                    self.web.evaluateJavaScript("""
+                    (()=>{const check=(v,m)=>{if(!v)throw Error(m)};check(!document.querySelector('#task-search-row').hidden,'native Cmd+F failed');const input=document.querySelector('#task-search');check(document.activeElement===input,'search focus');input.value='PHOTO';input.dispatchEvent(new Event('input',{bubbles:true}));check(document.querySelectorAll('.task[data-id]').length===1&&document.querySelector('.task[data-id]').dataset.id==='b','title search');check(document.querySelector('#task-sort').disabled,'filtered reorder enabled');input.value='工作';input.dispatchEvent(new Event('input',{bubbles:true}));check(document.querySelectorAll('.task[data-id]').length===1,'Unicode project search');input.value='not found';input.dispatchEvent(new Event('input',{bubbles:true}));check(!document.querySelector('.task[data-id]'),'empty results');return true;})();
+                    """) { _,error in
+                        if let error=error{self.writeReport(["error":error.localizedDescription,"detail":(error as NSError).userInfo["WKJavaScriptExceptionMessage"] ?? ""],"focus-tools.json");NSApp.terminate(nil);return}
+                        key("\u{1b}",53);key(",",43,true)
+                        DispatchQueue.main.asyncAfter(deadline:.now()+0.2) {
+                            self.web.evaluateJavaScript("""
+                            (()=>{const check=(v,m)=>{if(!v)throw Error(m)};check(document.querySelector('#task-search-row').hidden,'Escape did not close search');check([...document.querySelectorAll('.task[data-id]')].map(n=>n.dataset.id).join(',')==='c,a,b','search changed order');check(!document.querySelector('#list-display-panel').hidden,'native Cmd+comma failed');const select=document.querySelector('#text-size');select.value='large';select.dispatchEvent(new Event('change',{bubbles:true}));check(parseFloat(getComputedStyle(document.querySelector('.task-title')).fontSize)>17,'text scaling');check(parseFloat(getComputedStyle(document.querySelector('h1')).fontSize)===23,'window title scaled');const projectSize=getComputedStyle(document.querySelector('.task .project')).fontSize;document.querySelector('.task .task-toggle').click();check(getComputedStyle(document.querySelector('.task .project')).fontSize===projectSize,'scaled project changed on expand');document.querySelector('.display-close').click();return {nativeKeyboard:focusKeyTrace,search:true,projectSearch:true,emptyState:true,manualOrderPreserved:true,textScale:true,titleUnchanged:true,overflow:document.documentElement.scrollWidth>innerWidth,width:innerWidth};})();
+                            """) { value,error in
+                                let report:[String:Any]=["checks":value ?? NSNull(),"error":error?.localizedDescription as Any? ?? NSNull(),"detail":(error as NSError?)?.userInfo["WKJavaScriptExceptionMessage"] ?? NSNull()];self.writeReport(report,"focus-tools.json");self.capture("focus-tools.png") { NSApp.terminate(nil) }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    func runDisclosureQA() {
+        timer?.invalidate();panel.makeKeyAndOrderFront(nil);NSApp.activate(ignoringOtherApps:true)
+        let script="""
+        const check=(v,m)=>{if(!v)throw Error(m)},pause=ms=>new Promise(r=>setTimeout(r,ms));
+        const f=structuredClone(DASHBOARD_DEMO);f.capturedAt=new Date().toISOString();f.ledger.revision=100;
+        f.ledger.tasks=[{id:'a',title:'A roadmap with sixteen steps',project:'Example',note:'A short task note',steps:Array.from({length:16},(_,i)=>({id:'s'+i,text:'Step '+i,done:i<4,reported:'pending'}))},{id:'b',title:'Another task',project:'Example',steps:[{id:'one',text:'Step',done:false}]},{id:'c',title:'Completed task',project:'Example',steps:[{id:'one',text:'Step',done:true}]}];
+        centralLoadSnapshot(f);centralLoadPreferences({language:'en',theme:'warm',conversationHeight:130,compactOverview:true,taskOrder:[],expandedTasks:{},hideCompleted:false,hideCompletedSteps:true,stepLimit:5});
+        await pause(160);await new Promise(requestAnimationFrame);const a=()=>document.querySelector('[data-id=a]'),b=()=>document.querySelector('[data-id=b]');const closed=a().getBoundingClientRect().height,font=getComputedStyle(a().querySelector('.task-title')).fontSize,project=getComputedStyle(a().querySelector('.project')).fontSize,oldNext=b().getBoundingClientRect().top;
+        a().querySelector('.task-toggle').click();check(a().getAnimations().length,'expand animation missing');await pause(60);const middle=a().getBoundingClientRect().height,nextMiddle=b().getBoundingClientRect().top;await pause(240);const full=a().getBoundingClientRect().height,nextFinal=b().getBoundingClientRect().top;
+        check(closed<middle&&middle<full,'height did not interpolate '+[closed,middle,full]);check(oldNext<nextMiddle&&nextMiddle<nextFinal,'following row jumped');check(getComputedStyle(a().querySelector('.task-title')).fontSize===font,'title size changed');check(getComputedStyle(a().querySelector('.project')).fontSize===project,'project size changed');
+        a().querySelector('.step-visibility').click();await pause(280);check(a().querySelectorAll('.step.done:not([data-motion-ghost])').length===4,'completed steps unavailable');
+        a().querySelector('.more-steps').click();check(a().getAnimations().length,'more animation missing');await pause(280);check(a().querySelectorAll('.step[data-step-id]').length===16,'all steps unavailable');a().querySelector('.more-steps').click();await pause(280);check(a().querySelectorAll('.step[data-step-id]').length===5,'step ghosts remained');
+        a().querySelector('[data-step-id=s4] .info').click();check(a().getAnimations().length,'evidence animation missing');await pause(280);check(!a().querySelector('[data-step-id=s4] .step-details').hidden,'evidence did not open');
+        document.querySelector('#hide-done').click();await pause(280);check(!document.querySelector('[data-id=c]'),'completed task not filtered');check(!document.querySelector('[data-motion-ghost]'),'filter ghosts remained');
+        document.querySelector('#list-options').click();check(document.querySelector('#list-display-panel').getAnimations().length,'menu animation missing');await pause(190);document.querySelector('.display-close').click();await pause(35);document.querySelector('#list-options').click();await pause(190);check(!document.querySelector('#list-display-panel').hidden,'rapid reopen was hidden by stale completion');document.querySelector('.display-close').click();await pause(150);
+        const media=window.matchMedia;window.matchMedia=q=>q.includes('prefers-reduced-motion')?{matches:true}:media(q);a().querySelector('.task-toggle').click();check(!a().getAnimations().length,'reduced motion ignored');check(a().querySelector('.roadmap').hidden,'reduced collapse incomplete');window.matchMedia=media;
+        return {font,projectFont:project,interpolatedHeights:[closed,middle,full],followingRowInterpolated:true,completedSteps:true,moreSteps:true,evidence:true,filterCleanup:true,menuRapidToggle:true,reducedMotion:true,overflow:document.documentElement.scrollWidth>innerWidth,width:innerWidth};
+        """
+        web.callAsyncJavaScript(script,arguments:[:],in:nil,in:.page) { result in
+            switch result {case .success(let value):self.writeReport(["checks":value,"error":NSNull()],"disclosure-motion.json");case .failure(let error):self.writeReport(["error":error.localizedDescription,"detail":(error as NSError).userInfo["WKJavaScriptExceptionMessage"] ?? ""],"disclosure-motion.json")}
+            self.capture("disclosure-motion.png") { NSApp.terminate(nil) }
+        }
+    }
+    func runNativePointerQA() {
+        timer?.invalidate();panel.makeKeyAndOrderFront(nil);NSApp.activate(ignoringOtherApps:true)
+        let script="""
+        const f=structuredClone(DASHBOARD_DEMO);f.capturedAt=new Date().toISOString();f.ledger.revision=100;
+        f.ledger.tasks=['a','b','c'].map(id=>({id,title:'Task '+id,project:'Example',steps:[{id:'one',text:'Step',done:false}]}));centralLoadSnapshot(f);centralLoadPreferences({language:'en',theme:'warm',conversationHeight:150,compactOverview:true,taskOrder:[],expandedTasks:{}});document.querySelector('#task-sort').click();
+        window.pointerTrace=[];for(const kind of ['pointerdown','pointermove','pointerup','pointercancel','dragstart','dragend'])window.addEventListener(kind,e=>pointerTrace.push({kind,trusted:e.isTrusted,x:e.clientX,y:e.clientY}));
+        const h=document.querySelector('[data-id=c] .drag-handle').getBoundingClientRect(),t=document.querySelector('[data-id=a]').getBoundingClientRect();({x:h.left+h.width/2,y:h.top+h.height/2,tx:h.left+h.width/2,ty:t.top+5});
+        """
+        web.evaluateJavaScript(script) { value,error in
+            guard let points=value as? [String:Double],error == nil else { self.writeReport(["error":error?.localizedDescription ?? "missing coordinates"],"native-pointer.json");NSApp.terminate(nil);return }
+            func dispatch(_ type:NSEvent.EventType,_ x:Double,_ y:Double) {
+                let point=self.web.convert(NSPoint(x:x,y:self.web.isFlipped ? y:self.web.bounds.height-y),to:nil)
+                if let event=NSEvent.mouseEvent(with:type,location:point,modifierFlags:[],timestamp:ProcessInfo.processInfo.systemUptime,windowNumber:self.panel.windowNumber,context:nil,eventNumber:1,clickCount:1,pressure:type == .leftMouseUp ? 0:1) { self.panel.sendEvent(event) }
+            }
+            let x=points["x"]!,y=points["y"]!,tx=points["tx"]!,ty=points["ty"]!
+            dispatch(.mouseMoved,x,y);dispatch(.leftMouseDown,x,y)
+            for step in 1...14 {
+                DispatchQueue.main.asyncAfter(deadline:.now()+Double(step)*0.04) { let fraction=Double(step)/14;dispatch(.leftMouseDragged,x+(tx-x)*fraction,y+(ty-y)*fraction) }
+            }
+            DispatchQueue.main.asyncAfter(deadline:.now()+0.65) {
+                if CommandLine.arguments.contains("--cancel-pointer-drag"),let event=NSEvent.keyEvent(with:.keyDown,location:.zero,modifierFlags:[],timestamp:ProcessInfo.processInfo.systemUptime,windowNumber:self.panel.windowNumber,context:nil,characters:"\u{1b}",charactersIgnoringModifiers:"\u{1b}",isARepeat:false,keyCode:53) { self.panel.sendEvent(event) }
+            }
+            DispatchQueue.main.asyncAfter(deadline:.now()+0.75) {
+                dispatch(.leftMouseUp,tx,ty)
+                DispatchQueue.main.asyncAfter(deadline:.now()+0.4) {
+                    self.web.evaluateJavaScript("({order:[...document.querySelectorAll('#tasks .task[data-id]')].map(n=>n.dataset.id),trace:pointerTrace,ghosts:document.querySelectorAll('.task-drag-ghost').length,active:!!document.querySelector('.drag-source')})") { value,error in
+                        let report:[String:Any]=["result":value ?? NSNull(),"error":error?.localizedDescription as Any? ?? NSNull(),"nativeWindowEvents":true,"globalInputPosted":false];self.writeReport(report,"native-pointer.json")
+                        self.capture("native-pointer.png") { NSApp.terminate(nil) }
+                    }
+                }
+            }
+        }
+    }
+    func runSortMotionQA() {
+        timer?.invalidate();panel.orderFrontRegardless();panel.displayIfNeeded()
+        let first="""
+        const check=(v,m)=>{if(!v)throw Error(m)},pause=ms=>new Promise(r=>setTimeout(r,ms));
+        const f=structuredClone(DASHBOARD_DEMO);f.capturedAt=new Date().toISOString();f.ledger.revision=100;
+        f.ledger.tasks=['a','b','c'].map(id=>({id,title:'Task '+id,project:'Example',steps:[{id:'one',text:'Example step',done:false}]}));
+        centralLoadSnapshot(f);centralLoadPreferences({language:'en',theme:'warm',conversationHeight:150,compactOverview:true,taskOrder:[],expandedTasks:{}});document.querySelector('#task-sort').click();
+        document.querySelector('[data-id=b] .move-task').click();
+        const animations=document.querySelectorAll('.task');const active=[...animations].some(n=>n.getAnimations().length);check(active||window.matchMedia('(prefers-reduced-motion: reduce)').matches,'button motion missing');await pause(280);
+        const source=document.querySelector('[data-id=c] .drag-handle'),target=document.querySelector('[data-id=b]'),dt=new DataTransfer();
+        source.dispatchEvent(new DragEvent('dragstart',{bubbles:true,dataTransfer:dt}));target.dispatchEvent(new DragEvent('dragover',{bubbles:true,cancelable:true,dataTransfer:dt,clientY:target.getBoundingClientRect().top+1}));
+        check(document.querySelector('.task').dataset.id==='b','preview changed DOM order');await pause(220);
+        check(document.querySelector('[data-id=c]').getBoundingClientRect().top<target.getBoundingClientRect().top,'preview did not make room '+JSON.stringify([...document.querySelectorAll('#tasks .task')].map(n=>({id:n.dataset.id,y:n.getBoundingClientRect().top,style:n.style.transform,classes:n.className}))));
+        check(document.querySelector('.drag-source'),'pickup styling missing');source.dispatchEvent(new DragEvent('dragend',{bubbles:true,dataTransfer:dt}));await pause(280);
+        check(document.querySelector('.task').dataset.id==='b','cancel changed order');check(!document.querySelector('.drag-source'),'cancel cleanup failed');
+        return {buttonAnimation:active,livePreview:true,cancelRestores:true,width:innerWidth};
+        """
+        web.callAsyncJavaScript(first,arguments:[:],in:nil,in:.page) { result in
+            guard case .success(let value)=result else { self.writeReport(["error":String(describing:result)],"sort-motion.json");NSApp.terminate(nil);return }
+            let prefs=(try? Data(contentsOf:self.dataRoot.appendingPathComponent("panel-preferences.json"))).flatMap { try? JSONSerialization.jsonObject(with:$0) } as? [String:Any] ?? [:]
+            let cancelOrder=prefs["taskOrder"] as? [String] ?? []
+            let second="""
+            const check=(v,m)=>{if(!v)throw Error(m)},pause=ms=>new Promise(r=>setTimeout(r,ms));
+            const source=document.querySelector('[data-id=c] .drag-handle'),target=document.querySelector('[data-id=b]'),dt=new DataTransfer();source.dispatchEvent(new DragEvent('dragstart',{bubbles:true,dataTransfer:dt}));
+            target.dispatchEvent(new DragEvent('dragover',{bubbles:true,cancelable:true,dataTransfer:dt,clientY:target.getBoundingClientRect().top+1}));await pause(220);document.querySelector('#checklist').dispatchEvent(new DragEvent('drop',{bubbles:true,cancelable:true,dataTransfer:dt}));
+            check(document.querySelector('.task').dataset.id==='c','drop did not commit preview');await pause(280);
+            const match=window.matchMedia;window.matchMedia=q=>q.includes('prefers-reduced-motion')?{matches:true}:match(q);
+            document.querySelector('[data-id=c] .drag-handle').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true}));
+            check(document.querySelector('.task').dataset.id==='b','keyboard order failed');check(![...document.querySelectorAll('.task')].some(n=>n.getAnimations().length),'reduced motion ignored');window.matchMedia=match;
+            return {dropCommits:true,keyboard:true,reducedMotion:true,overflow:document.documentElement.scrollWidth>innerWidth};
+            """
+            self.web.callAsyncJavaScript(second,arguments:[:],in:nil,in:.page) { secondResult in
+                switch secondResult {
+                case .success(let secondValue):self.writeReport(["first":value,"second":secondValue,"cancelSavedOrder":cancelOrder,"cancelDidNotSavePreview":cancelOrder == ["b","a","c"],"error":NSNull()],"sort-motion.json")
+                case .failure(let error):self.writeReport(["error":error.localizedDescription],"sort-motion.json")
+                }
+                self.capture("sort-motion.png") { NSApp.terminate(nil) }
+            }
+        }
+    }
     func runRoadmapQA() {
         timer?.invalidate()
         let restore=CommandLine.arguments.contains("--roadmap-restore")
@@ -426,20 +562,20 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
           return {restored:true,order:true,compact:true,limit:true};
         }
         window.centralLoadPreferences({language:'en',theme:'warm',conversationHeight:200,hideCompleted:false,taskOrder:[],compactOverview:false,hideCompletedSteps:true,stepLimit:5,expandedTasks:{}});
-        check(long().querySelectorAll('.step').length===5,'initial cap');check(!long().querySelector('.step.done'),'completed hidden');
-        long().querySelector('.more-steps').click();check(long().querySelectorAll('.step').length===12,'show remaining');long().querySelector('.more-steps').click();
-        long().querySelector('.step-visibility').click();check(long().querySelector('.step.done'),'completed can be shown');long().querySelector('.step-visibility').click();
+        check(long().querySelectorAll('.step[data-step-id]').length===5,'initial cap');check(!long().querySelector('.step.done[data-step-id]'),'completed hidden');
+        long().querySelector('.more-steps').click();check(long().querySelectorAll('.step[data-step-id]').length===12,'show remaining');long().querySelector('.more-steps').click();
+        long().querySelector('.step-visibility').click();check(long().querySelector('.step.done[data-step-id]'),'completed can be shown');long().querySelector('.step-visibility').click();
         document.querySelector('#list-options').click();const choices=document.querySelectorAll('.display-choice input');choices[0].click();check(long().querySelector('.roadmap').hidden,'overview collapsed');document.querySelector('#task-sort').click();check(document.querySelector('#task-sort').getAttribute('aria-pressed')==='true','sort entry visible');
         document.querySelector('[data-id=second] .move-task').click();check(document.querySelector('.task').dataset.id==='second','manual move');
         const dt=new DataTransfer();document.querySelector('[data-id=third] .drag-handle').dispatchEvent(new DragEvent('dragstart',{bubbles:true,dataTransfer:dt}));const drop=document.querySelector('[data-id=second]');drop.dispatchEvent(new DragEvent('drop',{bubbles:true,cancelable:true,dataTransfer:dt,clientY:drop.getBoundingClientRect().top+1}));check(document.querySelector('.task').dataset.id==='third','drag order');document.querySelector('[data-id=third] .drag-handle').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true}));check(document.querySelector('.task').dataset.id==='second','keyboard order');
         const select=document.querySelector('#step-limit');select.value='3';select.dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('#list-options').click();
-        long().querySelector('.task-toggle').click();check(long().querySelectorAll('.step').length===3,'new cap');
+        long().querySelector('.task-toggle').click();check(long().querySelectorAll('.step[data-step-id]').length===3,'new cap');
         const before=f.ledger.tasks.map(t=>t.steps.map(s=>s.done));f.ledger.revision++;window.centralLoadSnapshot(f);check(document.querySelector('.task').dataset.id==='second','refresh preserves order');check(JSON.stringify(before)===JSON.stringify(f.ledger.tasks.map(t=>t.steps.map(s=>s.done))),'record unchanged');
         document.querySelector('#language').click();document.querySelector('#list-options').click();check(document.querySelector('#list-display-panel').textContent.includes('紧凑概览'),'Chinese view settings');document.querySelector('#list-options').click();
         return {cap:true,showAll:true,hideCompleted:true,overview:true,manualMove:true,dragEvents:true,keyboardMove:true,stableRefresh:true,recordUnchanged:true,bilingual:true,overflow:document.documentElement.scrollWidth>innerWidth};})();
         """
         web.evaluateJavaScript(script) { value,error in
-            self.writeReport(["checks":value ?? NSNull(),"error":error?.localizedDescription ?? NSNull(),"detail":(error as NSError?)?.userInfo["WKJavaScriptExceptionMessage"] ?? NSNull()],restore ? "roadmap-restore.json":"roadmap-controls.json")
+            let detail:Any=(error as NSError?)?.userInfo["WKJavaScriptExceptionMessage"] ?? NSNull();let report:[String:Any]=["checks":value ?? NSNull(),"error":error?.localizedDescription as Any? ?? NSNull(),"detail":detail];self.writeReport(report,restore ? "roadmap-restore.json":"roadmap-controls.json")
             self.capture("roadmap-controls.png") { NSApp.terminate(nil) }
         }
     }

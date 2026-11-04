@@ -18,6 +18,10 @@ Roadmaps, settings and connection metadata live under `~/Library/Application Sup
 
 The optional synchronization skill is installed only when selected. Its client follows the active roadmap connection and refuses writes when disconnected. Existing skills, global agent rules and lifecycle hooks are not replaced.
 
+## Local quick search
+
+Roadmap search matches existing task names and project labels already loaded into the panel. Search queries stay in memory, are not saved in preferences or the ledger, and are not sent to a service or model. It does not scan files or conversation content. Text size is an ordinary local view preference.
+
 ## Network and model use
 
 Core monitoring, file synchronization and demo mode make no network or background model calls. Opening a real conversation explicitly uses its supported desktop link. Agent-side planning can use the model already serving that conversation; that work is subject to the model account's normal usage limits.

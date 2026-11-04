@@ -24,13 +24,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 5488,
-      "sha256": "d8929aeb45eb3ca78e2b39d1f63d4c0e68af38bc36decd819cea03f76900e95e"
+      "bytes": 5798,
+      "sha256": "7902e5d5b388b9124b8703b9f3c0a13db5f738195670d9b8c5705d3da869881f"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 4871,
-      "sha256": "d275534cb319b3836d48ddc5d20d5c615fa92170d8bff7ec4ec418a7f1a665b4"
+      "bytes": 5139,
+      "sha256": "88d8814648243cc12ae90afa49ba3a1f4ac856cfbbd3ccc8258b7c8ba3943585"
     },
     {
       "path": "build.sh",
@@ -44,43 +44,48 @@
     },
     {
       "path": "docs/DEMO.md",
-      "bytes": 1990,
-      "sha256": "7acc3c42281913368dc9ac563fe5b44ca13ade80c26469492a07640eb4ad823c"
+      "bytes": 2106,
+      "sha256": "81f5774c43761e31d0c7ce72580e2ff46ed00756d72d74c73b58b2e151b7287a"
+    },
+    {
+      "path": "docs/DESIGN.md",
+      "bytes": 4122,
+      "sha256": "1fb684c2613eab2ff4827ec6e3f6b0dceb40a70a7c1f423911848347d68a562f"
     },
     {
       "path": "docs/INSTALL-MACOS.md",
-      "bytes": 4419,
-      "sha256": "a44fd8062a6e43aa0a945793b4bc872a868a9b8d0f5beb1b074590cca812f6d4"
+      "bytes": 4819,
+      "sha256": "90d0c87f037f49284b5a4403ba0a1cace289aa726a8c2026829a914df19e8f38"
     },
     {
       "path": "docs/LANDSCAPE.md",
-      "bytes": 2231,
-      "sha256": "924ac7fe92a20297041523d40454be4b0e90756b90e3437eff9841a026b774cb"
+      "bytes": 2233,
+      "sha256": "766909f4dda43f09181124c6f2bc466b53b280287fb4c584288df60b7f7a8429"
     },
     {
       "path": "docs/PRIVACY.md",
-      "bytes": 2696,
-      "sha256": "caf7c527555f9951cb7069af207fa9ff9bd1e3ca5abbfc76529c0663453a9f5e"
+      "bytes": 3024,
+      "sha256": "7bc61b74bd6ef13c8ae203bfe2173b92e5f8c3ea3e00d77a04addd8578e8227b"
     },
     {
       "path": "docs/demo-en.gif",
-      "bytes": 69687,
-      "sha256": "a747d2c47e0eebc00fa21533daa489a1a3c8c68ed27ea7cb5c1360bc9c1c1e4a"
+      "bytes": 69290,
+      "sha256": "018441e9a4fa741d09884f3e95203b1428b47603dc8adb7f096fc08d0296a923"
     },
     {
       "path": "docs/demo-zh.gif",
-      "bytes": 64756,
-      "sha256": "f0608babb26ec735932c6204751f5d78039c35e46d96ee7f8361795994035500"
+      "bytes": 64741,
+      "sha256": "8ef9dfab0379506e77bdc56a57570416b11501813789822f36a7225e5a352bfd"
     },
     {
       "path": "docs/preview-en.png",
-      "bytes": 215058,
-      "sha256": "040931e6cc941dc7f763c5120f9776ad5228ebad68c9124dae6a7e160a1d4120"
+      "bytes": 219257,
+      "sha256": "44b8118a60295478c9be2ba4ae522f5c83809bbd1974f798d713ec46782f192f"
     },
     {
       "path": "docs/preview-zh.png",
-      "bytes": 216045,
-      "sha256": "b052b99bbd8d397d839b7001b4ac9daac43f7f84a08131fbdbd92447a8e4a0fa"
+      "bytes": 216469,
+      "sha256": "d721e8d9a5b9e79b39744f6a6949030f8e8fe0b71b0d3898827660a5fbc4370b"
     },
     {
       "path": "samples/demo.json",
@@ -89,8 +94,8 @@
     },
     {
       "path": "scripts/export_source.py",
-      "bytes": 5386,
-      "sha256": "d767b56775a8331b2619c74ae31538e19f03fddf85f783ba25607db9de7ab5f6"
+      "bytes": 5403,
+      "sha256": "6f87b68ac6f0cd5231b6607e740ad5fc3ad8186749d813904344bbf63b2c7e93"
     },
     {
       "path": "scripts/install.py",
@@ -100,7 +105,7 @@
     {
       "path": "scripts/package_macos.py",
       "bytes": 4310,
-      "sha256": "acf6f355cd5b6c31d617258af0cf8a8c4fdddbc11711c061b810622149749bb5"
+      "sha256": "57167ce539586fc66583ec7bdc319ab38b9417f8790282af2d981f486f2da61d"
     },
     {
       "path": "skills/roadmap-dashboard-sync/SKILL.md",
@@ -109,13 +114,13 @@
     },
     {
       "path": "src/Monitor.swift",
-      "bytes": 44240,
-      "sha256": "4cd6c6fa8101d24a5e121f51076adb33b13b87c5f098b8c859d8ca443391e92e"
+      "bytes": 63982,
+      "sha256": "93f0544d2fba3204c049fccb7b6464c00ac6dd66045a317fa89a7a158854d318"
     },
     {
       "path": "src/app.js",
-      "bytes": 20854,
-      "sha256": "02d2ef663fd50c91a5e37c78c76f5add307ce4968f83f71bc5838121250c11bd"
+      "bytes": 34718,
+      "sha256": "67f5cf814571f59a317e48aa0df5fe8aa32c2bdf46eea76621cffbc9ab9cc0b0"
     },
     {
       "path": "src/connection.js",
@@ -134,13 +139,13 @@
     },
     {
       "path": "src/i18n.js",
-      "bytes": 6530,
-      "sha256": "2d39ae073c64cfff23a4dcccb21ca9ce0ff87512602021f4e031d161ab600b31"
+      "bytes": 6976,
+      "sha256": "fec41415357b8ff09272f26ef8f0d8fa45917c770cf2dfa4db291e48dd64e901"
     },
     {
       "path": "src/index.html",
-      "bytes": 3639,
-      "sha256": "783cb5dcdcda578fd894f0d40d133a3796beeba3036c038b8da929ee726d19e7"
+      "bytes": 4521,
+      "sha256": "f2ed58719918d3068c8114e234711ac099c300176d3c0604a6fa6f3c40b02ca4"
     },
     {
       "path": "src/preview.js",
@@ -154,8 +159,8 @@
     },
     {
       "path": "src/style.css",
-      "bytes": 11416,
-      "sha256": "7489382b95b76a709646d8ac0593a45a24297ad55044fe8a17fd985822476d89"
+      "bytes": 13737,
+      "sha256": "4392b0502058a7af6c2b9a731920b4f430da4b7faa62b95c3a6d6cd35fb914d5"
     },
     {
       "path": "sync/client.py",

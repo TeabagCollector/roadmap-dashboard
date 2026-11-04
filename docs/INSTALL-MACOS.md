@@ -1,10 +1,10 @@
 # Install Dashboard for Codex / 安装说明
 
-Apple silicon (M1 or newer), macOS 15+ deployment target. Version **0.5.0-preview.3** includes Python; no extra login, API key or developer tools are needed.
+Apple silicon (M1 or newer), macOS 15+ deployment target. Version **0.5.0-preview.4** includes Python; no extra login, API key or developer tools are needed.
 
 ## Three steps
 
-1. **Download the DMG** from the [test release](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.3). Choose the `.dmg`; the application ZIP is an alternative and the source ZIP is for developers.
+1. **Download the DMG** from the [test release](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.4). Choose the `.dmg`; the application ZIP is an alternative and the source ZIP is for developers.
 2. **Drag Dashboard for Codex.app into Applications.** Eject the disk image and open the installed app. You can also use your own `~/Applications` folder. Quit a previous copy before replacing it.
 3. **Click Start tracking real work** when your local Codex records are found. Leave **Also enable roadmap tracking** selected to install the separate sync skill, or uncheck it for conversation monitoring alone. Missing sources are explained with retry and folder selection. In a new supported Codex work chat, give the agent a concrete task; an existing chat can invoke `$roadmap-dashboard-sync` once.
 
@@ -14,7 +14,7 @@ This test app is ad-hoc signed and **not notarized**. If you trust the source an
 
 ## Roadmap display
 
-Use **Sort** beside **My roadmap** to reveal drag handles and up/down arrows; click **Done sorting** to finish. **View** contains compact overview, hiding completed steps, and the per-task step limit (3 / 5 / 8 / all). Longer roadmaps have a button to show the remaining steps. View settings and order persist without changing task records.
+Use **Sort** beside **My roadmap** to reveal drag handles and up/down arrows; click **Done sorting** to finish. **View** contains compact overview, hiding completed steps, and the per-task step limit (3 / 5 / 8 / all). Longer roadmaps have a button to show the remaining steps. Use ⌘F or the search button to find a task or project; Escape clears the search. ⌘, opens view settings, including small / standard / large text. Search terms stay in memory and ordering is disabled while a query filters the list. View settings and order persist without changing task records.
 
 ## Optional checksum check
 
@@ -32,13 +32,13 @@ To remove the app, quit it and move the app to Trash. Tasks and preferences rema
 
 适用于 M1 或更新芯片的 Mac，部署目标为 macOS 15+。自带 Python，不需要另行登录、API Key 或开发工具。
 
-1. **下载 DMG**：[打开测试版下载页](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.3)，选择 `.dmg` 即可。
+1. **下载 DMG**：[打开测试版下载页](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.4)，选择 `.dmg` 即可。
 2. **拖入 Applications**：复制应用后推出镜像，再从 Applications 打开；也可以放自己的 `~/Applications`。更新前先退出旧版。
 3. **点“开始追踪真实工作”**：检测到本机 Codex 记录后确认接入。同屏可一起启用任务路线同步 skill；已有对话可调用一次 `$roadmap-dashboard-sync`，新工作对话可发现该 skill。找不到来源时按提示重试或选文件夹。
 
 尚未公证，macOS 可能拦截。如果信任来源并决定继续，可在系统提供时使用“系统设置 → 隐私与安全性 → 仍要打开”单独授权；若提示损坏或无相应选项，反馈提示即可，不关闭系统安全保护。
 
-**清单显示：** “我的清单”旁的 **排序** 直接显示把手和上下按钮；点“完成排序”退出。“显示”菜单提供紧凑概览、隐藏已完成步骤，以及 3 / 5 / 8 / 不限的条数选择，长路线可展开剩余步骤。设置与顺序会保存，不改任务记录。
+**清单显示：** “我的清单”旁的 **排序** 直接显示把手和上下按钮；点“完成排序”退出。“显示”菜单提供紧凑概览、隐藏已完成步骤，以及 3 / 5 / 8 / 不限的条数选择，长路线可展开剩余步骤。⌘F 或搜索按钮可找任务/项目，Esc 退出；⌘, 打开显示设置，另有三档文字大小。搜索词只在内存中保留，搜索时暂不排序。设置与顺序会保存，不改任务记录。
 
 **SHA256 校验完全可选，普通安装不需要做。** 校验文件留给需要检查下载完整性的人。
 

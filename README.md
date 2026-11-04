@@ -6,7 +6,7 @@ An independent macOS companion for local work in ChatGPT Desktop.
 
 Follow work across projects, catch new replies, and expand each task into a checklist you can verify step by step.
 
-[简体中文](README.zh-CN.md) · [Get started](#get-started-in-three-steps) · [Setup guide](docs/CONNECT.md) · [Data handling](docs/PRIVACY.md)
+[**Download macOS test preview**](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.4) · [简体中文](README.zh-CN.md) · [Get started](#get-started-in-three-steps) · [Setup guide](docs/CONNECT.md) · [Data handling](docs/PRIVACY.md)
 
 <a href="docs/preview-en.png"><img src="docs/preview-en.png" alt="Dashboard for Codex: warm paper theme with working conversations and an expanded roadmap" width="340"></a>
 
@@ -22,11 +22,11 @@ A 14-second sample-data walkthrough of the public interface. Conversation events
 - **Roadmaps:** expand tasks into steps, see progress and evidence, and jump back to the linked local work chat.
 - **Completion:** an agent's delivery report remains pending review until verified or checked by you. Your manual checks and reopened steps take priority.
 
-The panel has independently scrollable sections, a draggable divider, five themes, and English / Simplified Chinese switching. Use **Sort** beside **My roadmap** to arrange tasks. **View** offers a compact overview, hiding completed steps, and a 3 / 5 / 8 / all step limit. Settings persist across restarts. Checksums are optional; normal installation is download → drag into Applications → open and connect.
+The panel has independently scrollable sections, a draggable divider, five themes, and English / Simplified Chinese switching. Use **Sort** beside **My roadmap** to arrange tasks. **View** offers a compact overview, hiding completed steps, and a 3 / 5 / 8 / all step limit. Use **⌘F** to search task names or projects locally, and **⌘,** for view settings including text size. Search queries are not saved. Settings persist across restarts. [Design decisions and comparisons](docs/DESIGN.md). Checksums are optional; normal installation is download → drag into Applications → open and connect.
 
 ## Get started in three steps
 
-**Apple silicon app preview:** [download v0.5.0-preview.3](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.3). The app includes Python and does not require developer tools. It is **not notarized**; macOS may block first launch. Another physical Mac has not yet been verified. Read [installation and test instructions](docs/INSTALL-MACOS.md).
+**Apple silicon app preview:** [download v0.5.0-preview.4](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.4). The app includes Python and does not require developer tools. It is **not notarized**; macOS may block first launch. Another physical Mac has not yet been verified. Read [installation and test instructions](docs/INSTALL-MACOS.md).
 
 For a **source installation**, you need macOS 15+, Swift 6 command-line tools and Python 3.9+.
 

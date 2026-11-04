@@ -12,4 +12,4 @@ This is a small first-party-source comparison, not an exhaustive market survey o
 Multiple unrelated products use the name AgentDock or Mission Control. Links above identify exact repositories; the native profile manager `euforic/AgentDock`, the commercial site `agentdockapp.com` and other AgentDock services should not be conflated with `jstarfruits/AgentDock`.
 
 
-Roadmap Dashboard focuses on the ChatGPT Desktop workflow and persistent roadmaps. Similar monitoring tools already exist; no uniqueness claim is made.
+Dashboard for Codex focuses on the ChatGPT Desktop workflow and persistent roadmaps. Similar monitoring tools already exist; no uniqueness claim is made.

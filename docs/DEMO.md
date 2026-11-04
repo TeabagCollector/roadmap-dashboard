@@ -2,6 +2,8 @@
 
 The animated walkthrough uses the public browser preview and fictional data from `src/demo-data.js`, rendered in WebKit. Window framing and captions are presentation styling; the panel content is the public interface.
 
+The walkthrough keeps completed steps visible through the View preference so that manual confirmation can be seen.
+
 Five scenes, 2.8 seconds each:
 
 1. Work across projects, with the Notes roadmap collapsed.
