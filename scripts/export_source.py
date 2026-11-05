@@ -7,10 +7,11 @@ ROOT = Path(__file__).resolve().parents[1]
 FILES = (
  '.gitignore','LICENSE','README.md','README.zh-CN.md','build.sh',
  'Preview English.command','预览中文版.command','Install.command',
- 'src/roadmap-model.js','src/Monitor.swift','src/index.html','src/style.css','src/app.js',
+ 'src/Updater.swift','src/roadmap-model.js','src/Monitor.swift','src/index.html','src/style.css','src/app.js',
  'src/conversation-model.js','src/connection.js','src/i18n.js','src/demo-data.js','src/preview.js',
  'sync/dashboard.py','sync/setup.py','sync/client.py','samples/demo.json',
  'tests/test_sync.py','tests/test_setup.py','tests/test_export.py','tests/conversations.test.cjs','tests/roadmaps.test.cjs',
+ 'scripts/fetch_sparkle.py','scripts/make_appcast.py','updates/public-key.txt','updates/appcast.xml','docs/UPDATES.md','tests/updater/RelaunchReceipt.m','tests/updater/UpdaterHarness.m','tests/updater/SettingsHarness.swift',
  'scripts/export_source.py','scripts/install.py','scripts/package_macos.py','docs/INSTALL-MACOS.md','docs/CONNECT.md','docs/PRIVACY.md','docs/LANDSCAPE.md','docs/DESIGN.md',
  'docs/preview-en.png','docs/preview-zh.png','docs/demo-en.gif','docs/demo-zh.gif','docs/DEMO.md',
  'skills/roadmap-dashboard-sync/SKILL.md',

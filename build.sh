@@ -12,9 +12,9 @@ for name in ('dashboard.py','setup.py','client.py'):shutil.copyfile(root/'sync'/
 shutil.copytree(root/'skills',app/'Contents/Resources/runtime/skills',dirs_exist_ok=True)
 for cache in (app/'Contents/Resources/runtime').rglob('__pycache__'):shutil.rmtree(cache)
 shutil.copyfile(root/'samples/demo.json',app/'Contents/Resources/runtime/samples/demo.json')
-info={'CFBundleName':'Roadmap Dashboard Preview','CFBundleDisplayName':'Roadmap Dashboard Preview','CFBundleIdentifier':'local.roadmap-dashboard.preview','CFBundleExecutable':'roadmap-dashboard','CFBundlePackageType':'APPL','CFBundleShortVersionString':'0.4.0-preview','LSUIElement':True,'NSHighResolutionCapable':True,'LSMinimumSystemVersion':'15.0'}
+info={'CFBundleName':'Roadmap Dashboard Preview','CFBundleDisplayName':'Roadmap Dashboard Preview','CFBundleIdentifier':'local.roadmap-dashboard.preview','CFBundleExecutable':'roadmap-dashboard','CFBundlePackageType':'APPL','CFBundleShortVersionString':'0.5.0-preview.6-source','CFBundleVersion':'10','LSUIElement':True,'NSHighResolutionCapable':True,'LSMinimumSystemVersion':'15.0'}
 (app/'Contents/Info.plist').write_bytes(plistlib.dumps(info))
 PY
-swiftc -module-cache-path "$project_root/build/module-cache" -framework AppKit -framework WebKit -framework Carbon "$project_root/src/Monitor.swift" -o "$app/Contents/MacOS/roadmap-dashboard"
+swiftc -module-cache-path "$project_root/build/module-cache" -framework AppKit -framework WebKit -framework Carbon "$project_root/src/Monitor.swift" "$project_root/src/Updater.swift" -o "$app/Contents/MacOS/roadmap-dashboard"
 codesign --force --sign - "$app" >/dev/null 2>&1
 printf '%s\n' "$app"

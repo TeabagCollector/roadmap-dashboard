@@ -1,5 +1,6 @@
 import AppKit
 import Carbon
+import Darwin
 @preconcurrency import WebKit
 
 final class FloatingPanel: NSPanel {
@@ -24,8 +25,11 @@ final class DragStrip: NSView {
     }
     override func mouseUp(with event:NSEvent) { grabOffset=nil }
 }
-final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler, WKNavigationDelegate, NSWindowDelegate {
+final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHandler, WKNavigationDelegate, NSWindowDelegate, NSMenuItemValidation {
     var panel: FloatingPanel!
+    var updates:DashboardUpdater?
+    var instanceHandle:Int32 = -1
+    var lastActivation=Date()
     var web: WKWebView!
     var statusItem: NSStatusItem!
     var timer: Timer?
@@ -77,6 +81,9 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         if let location=argument("--data") { dataRoot=URL(fileURLWithPath:location,isDirectory:true) }
         else { dataRoot=baseRoot.appendingPathComponent(liveMode ? "live" : "demo",isDirectory:true) }
         try? FileManager.default.createDirectory(at:dataRoot,withIntermediateDirectories:true,attributes:[.posixPermissions:0o700])
+        if !qa && !restore && !captureOnly && !hotKeyQA && !shortcutQA && !onboardingQA {
+            guard acquireInstance() else { NSApp.terminate(nil);return }
+        }
         if !liveMode { prepareDemo() }
         if liveMode && !qa && !restore && !captureOnly && !hotKeyQA { startWatcher() }
         panel = FloatingPanel(contentRect:NSRect(x:0,y:0,width:400,height:660),styleMask:[.titled,.closable,.resizable,.fullSizeContentView],backing:.buffered,defer:false)
@@ -140,12 +147,31 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
             panel.setFrameOrigin(NSPoint(x:-10000,y:-10000))
             DispatchQueue.main.asyncAfter(deadline:.now()+0.3) { self.runHotKeyQA() }
         }
-        timer = Timer.scheduledTimer(withTimeInterval:1,repeats:true) { [weak self] _ in self?.loadSnapshot() }
+        timer = Timer.scheduledTimer(withTimeInterval:1,repeats:true) { [weak self] _ in self?.loadSnapshot();self?.checkActivation() }
         if qa || restore || captureOnly {
             DispatchQueue.main.asyncAfter(deadline:.now()+30) {
                 self.writeReport(["passed":false,"error":"Native verification timed out"],"dashboard-timeout.json")
                 NSApp.terminate(nil)
             }
+        }
+    }
+    func acquireInstance()->Bool {
+        instanceHandle=open(baseRoot.appendingPathComponent("dashboard-instance.lock").path,O_CREAT|O_RDWR,0o600)
+        guard instanceHandle >= 0 else { return false }
+        guard flock(instanceHandle,LOCK_EX|LOCK_NB) == 0 else {
+            close(instanceHandle);instanceHandle = -1
+            try? Data("activate".utf8).write(to:baseRoot.appendingPathComponent("activation-request"),options:.atomic)
+            return false
+        }
+        let process:[String:Any]=["pid":ProcessInfo.processInfo.processIdentifier,"application":Bundle.main.bundleURL.path,"bundleIdentifier":Bundle.main.bundleIdentifier ?? ""]
+        try? JSONSerialization.data(withJSONObject:process).write(to:baseRoot.appendingPathComponent("dashboard-process.json"),options:.atomic)
+        return true
+    }
+    func checkActivation() {
+        guard baseRoot != nil else { return }
+        let url=baseRoot.appendingPathComponent("activation-request")
+        if let modified=(try? FileManager.default.attributesOfItem(atPath:url.path))?[.modificationDate] as? Date,modified>lastActivation {
+            lastActivation=modified;NSApp.activate(ignoringOtherApps:true);panel.makeKeyAndOrderFront(nil)
         }
     }
     static func shouldHide(visible:Bool,active:Bool,key:Bool)->Bool { visible && active && key }
@@ -155,6 +181,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
     }
     func updateMenuLanguage() {
         guard statusItem != nil else { return }
+        updates?.setLanguage(language)
         let en=language == "en",menu=NSMenu()
         let show=NSMenuItem(title:en ? "Show / Hide Dashboard" : "显示 / 隐藏 Dashboard",action:#selector(togglePanel),keyEquivalent:"")
         menu.addItem(show)
@@ -168,15 +195,22 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         }
         menu.addItem(.separator())
         menu.addItem(withTitle:en ? "Check for Updates…" : "检查更新…",action:#selector(checkForUpdates),keyEquivalent:"")
+        menu.addItem(withTitle:en ? "Update Settings…" : "更新设置…",action:#selector(updateSettings),keyEquivalent:"")
+        let version=NSMenuItem(title:"Dashboard · \(Bundle.main.object(forInfoDictionaryKey:"CFBundleShortVersionString") as? String ?? "source")",action:nil,keyEquivalent:"");version.isEnabled=false;menu.addItem(version)
         menu.addItem(withTitle:en ? "Quit Dashboard" : "退出 Dashboard",action:#selector(quit),keyEquivalent:"q")
         menu.items.forEach { $0.target=self }
         statusItem.menu=menu
         statusItem.button?.toolTip=shortcutEnabled && shortcutStatus == noErr ? "Dashboard · ⌘D" : "Dashboard"
     }
-    @objc func checkForUpdates() {
-        // Explicit click only; GitHub's /latest excludes preview releases.
-        NSWorkspace.shared.open(URL(string:"https://github.com/TeabagCollector/roadmap-dashboard/releases")!)
+    func validateMenuItem(_ item:NSMenuItem)->Bool {
+        if item.action == #selector(checkForUpdates) { return updates?.canCheck ?? true }
+        return item.action != nil
     }
+    @objc func checkForUpdates() {
+        if let updates=updates { updates.check() }
+        else { NSWorkspace.shared.open(URL(string:"https://github.com/TeabagCollector/roadmap-dashboard/releases")!) }
+    }
+    @objc func updateSettings() { updates?.settings() }
     func loadShortcutPreference() {
         let url=baseRoot.appendingPathComponent("shortcut.json")
         if let data=try? Data(contentsOf:url),let value=(try? JSONSerialization.jsonObject(with:data)) as? [String:Any],let enabled=value["enabled"] as? Bool {
@@ -285,6 +319,11 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
     }
     func applicationWillTerminate(_ notification:Notification) {
         timer?.invalidate()
+        if instanceHandle >= 0 {
+            let url=baseRoot.appendingPathComponent("dashboard-process.json")
+            if let data=try? Data(contentsOf:url),let value=(try? JSONSerialization.jsonObject(with:data)) as? [String:Any],value["pid"] as? Int32 == ProcessInfo.processInfo.processIdentifier { try? FileManager.default.removeItem(at:url) }
+            close(instanceHandle)
+        }
         unregisterHotKey()
         if watcher?.isRunning == true { watcher?.terminate() }
     }
@@ -302,7 +341,7 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
             return noErr
         }
         let installed=InstallEventHandler(GetApplicationEventTarget(),callback,2,&specs,Unmanaged.passUnretained(self).toOpaque(),&hotKeyHandler)
-        let status=installed == noErr ? RegisterEventHotKey(UInt32(kVK_ANSI_D),UInt32(cmdKey),hotKeyID,GetApplicationEventTarget(),0,&hotKey) : installed
+        let status=installed == noErr ? RegisterEventHotKey(UInt32(kVK_ANSI_D),UInt32(cmdKey),hotKeyID,GetApplicationEventTarget(),OptionBits(kEventHotKeyExclusive),&hotKey) : installed
         writeReport(["registered":status == noErr,"status":status,"shortcut":"Command+D","requiresAccessibility":false],hotKeyQA ? "hotkey-qa-registration.json" : "hotkey-registration.json")
         shortcutStatus=status
         if status != noErr { unregisterHotKey() }
@@ -422,6 +461,11 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
                 DispatchQueue.main.asyncAfter(deadline:.now()+0.4) {
                     if !self.shortcutConfigured { self.promptShortcut() }
                     else if self.shortcutEnabled && self.shortcutStatus != noErr { self.showShortcutConflict() }
+                    if !CommandLine.arguments.contains("--shortcut-production-smoke") {
+                        let updates=DashboardUpdater();self.updates=updates
+                        updates.changed={ [weak self] in self?.updateMenuLanguage() }
+                        updates.start(panel:self.panel,language:self.language)
+                    }
                 }
             }
             writeReport(["level":panel.level.rawValue,"normalWindow":panel.level == .normal,"commandD":"bring-front-if-covered;hide-if-already-active"],"window-mode.json")
@@ -830,7 +874,10 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         }
     }
 }
-let application=NSApplication.shared
-let delegate=MonitorDelegate()
-application.delegate=delegate
-application.run()
+@main struct DashboardMain {
+    static func main() {
+        let application=NSApplication.shared
+        let delegate=MonitorDelegate();application.delegate=delegate
+        withExtendedLifetime(delegate) { application.run() }
+    }
+}

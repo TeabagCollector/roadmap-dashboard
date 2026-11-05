@@ -1,10 +1,10 @@
 # Install Dashboard for Codex / 安装说明
 
-Apple silicon (M1 or newer), macOS 15+ deployment target. Version **0.5.0-preview.5** includes Python; no extra login, API key or developer tools are needed.
+Apple silicon (M1 or newer), macOS 15+ deployment target. Version **0.5.0-preview.6** includes Python; no extra login, API key or developer tools are needed.
 
 ## Three steps
 
-1. **Download the DMG** from the [test release](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5). Choose the `.dmg`; the application ZIP is an alternative and the source ZIP is for developers.
+1. **Download the DMG** from the [test release](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6). Choose the `.dmg`; the application ZIP is an alternative and the source ZIP is for developers.
 2. **Drag Dashboard for Codex.app into Applications.** Eject the disk image and open the installed app. You can also use your own `~/Applications` folder. Quit a previous copy before replacing it.
 3. **Click Start tracking real work** when your local Codex records are found. Leave **Also enable roadmap tracking** selected to install the separate sync skill, or uncheck it for conversation monitoring alone. Missing sources are explained with retry and folder selection. In a new supported Codex work chat, give the agent a concrete task; an existing chat can invoke `$roadmap-dashboard-sync` once.
 
@@ -32,7 +32,7 @@ To remove the app, quit it and move the app to Trash. Tasks and preferences rema
 
 适用于 M1 或更新芯片的 Mac，部署目标为 macOS 15+。自带 Python，不需要另行登录、API Key 或开发工具。
 
-1. **下载 DMG**：[打开测试版下载页](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5)，选择 `.dmg` 即可。
+1. **下载 DMG**：[打开测试版下载页](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6)，选择 `.dmg` 即可。
 2. **拖入 Applications**：复制应用后推出镜像，再从 Applications 打开；也可以放自己的 `~/Applications`。更新前先退出旧版。
 3. **点“开始追踪真实工作”**：检测到本机 Codex 记录后确认接入。同屏可一起启用任务路线同步 skill；已有对话可调用一次 `$roadmap-dashboard-sync`，新工作对话可发现该 skill。找不到来源时按提示重试或选文件夹。
 
@@ -50,10 +50,10 @@ On first launch, choose **Enable ⌘D** to register a global shortcut while Dash
 
 If another application or a second Dashboard copy holds ⌘D, an alert and menu status explain the conflict. Release it in that application, then choose **Retry ⌘D**. The app does not silently take it over.
 
-**Check for Updates…** opens the GitHub releases page only when clicked. Download the new DMG, quit Dashboard, replace the application, then reopen it. Your existing roadmap, themes, language and shortcut choice are stored separately and retained. This is a manual update shortcut, not background checking or automatic replacement. Older builds without this menu need one manual download first.
+**Check for Updates…** checks inside the prebuilt app. First launch offers automatic checking; **Not Now** keeps background checks off and is remembered. **Update Settings…** offers daily checking and a separate, default-off **Download and install on quit** option. Automatic downloading can install on exit, but never forces a restart. Older versions need one manual upgrade first. Plain source builds without Sparkle retain the releases-page fallback. [Update details](UPDATES.md).
 
 首次启动选择 **开启 ⌘D**，应用运行时即可全局唤起；面板已激活时再按一次隐藏。选择 **暂不开启** 则不占用快捷键，两种选择都会记住。开启期间会替代其他应用原有的 ⌘D 功能，可从顶部菜单栏的 Dashboard 图标随时开关，无需辅助功能权限。
 
 如其他应用或另一份 Dashboard 已占用快捷键，会弹出提示并在菜单显示状态；释放占用后，选择 **重试 ⌘D**。菜单始终提供 **显示 / 隐藏 Dashboard** 作为替代。
 
-**检查更新…** 仅在点击时打开 GitHub 下载页，不后台检查或自动替换。下载新版 DMG，退出旧应用后替换，再打开即可。原有清单、主题、语言和快捷键选择保留。旧版没有此入口的用户，需要先手动下载升级一次。
+**检查更新…** 会在预编译应用内检查新版。首次启动可允许自动检查，也可选「暂不开启」并记住。「更新设置…」可选择每天检查；「自动下载，并在退出时安装」单独选择、默认关闭，不会强制重启。旧版用户需先手动覆盖升级一次。未链接 Sparkle 的普通源码构建仍使用手动下载入口。[详细说明](UPDATES.md)。

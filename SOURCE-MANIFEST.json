@@ -24,18 +24,18 @@
     },
     {
       "path": "README.md",
-      "bytes": 6040,
-      "sha256": "366c8655270fdea21723ae4e98b0fee833a8e6aac8d45d5b1c50b4b804a51212"
+      "bytes": 6215,
+      "sha256": "6803b5e53f440fd8cabccb1bf3347aa853386e88877144cb912d872fa53c494a"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 5379,
-      "sha256": "0f23978f1e078b1b989bf14abcb0f679d7a9037eb0ba281da410cd105477af50"
+      "bytes": 5552,
+      "sha256": "9ce464837bcbf2a5027fc5ba1d5a8de346b6befbff83fd41c65ac9f02f6ffc87"
     },
     {
       "path": "build.sh",
-      "bytes": 1724,
-      "sha256": "6eb57ea6d27054db4ac910678cfbe05486da5e534bf3e1daf1d86f3dccdab364"
+      "bytes": 1790,
+      "sha256": "418772323f00e950b94ec4b612be92d48c058e713937485fb0419f71b9f387a4"
     },
     {
       "path": "docs/CONNECT.md",
@@ -54,8 +54,8 @@
     },
     {
       "path": "docs/INSTALL-MACOS.md",
-      "bytes": 6644,
-      "sha256": "2b5ce68334a9b1872489caba184f68e86c4369fd5c31007831edf329b457eea4"
+      "bytes": 6866,
+      "sha256": "e2a939cfdfd786cb7ba525da7ce11725b2c2a57e17b128b52a2dcfdadf7da99a"
     },
     {
       "path": "docs/LANDSCAPE.md",
@@ -64,8 +64,13 @@
     },
     {
       "path": "docs/PRIVACY.md",
-      "bytes": 3288,
-      "sha256": "7413e9c54470b07cc5a98f90968f710269cbce4b7ef93f5c6881641039a6ade8"
+      "bytes": 3610,
+      "sha256": "bb6d1e4309a890e63ae43cccc976910f73435dcfca9a8d2c3c2f27bf13c884de"
+    },
+    {
+      "path": "docs/UPDATES.md",
+      "bytes": 5144,
+      "sha256": "b5f64f12db0a44ee05a5a17b0183ec24e5f4ffdc5c831089b917d41f66a041a9"
     },
     {
       "path": "docs/demo-en.gif",
@@ -94,8 +99,13 @@
     },
     {
       "path": "scripts/export_source.py",
-      "bytes": 5403,
-      "sha256": "6f87b68ac6f0cd5231b6607e740ad5fc3ad8186749d813904344bbf63b2c7e93"
+      "bytes": 5648,
+      "sha256": "d07e0f61c39a5c4555e0b8dcaa95d48ab2405c2b9b7f413c1cd945762bb7b0d5"
+    },
+    {
+      "path": "scripts/fetch_sparkle.py",
+      "bytes": 1763,
+      "sha256": "1e89a142d6d589cf87076e160ff496dcceb07089112065d2fd85a50d53fdc6fd"
     },
     {
       "path": "scripts/install.py",
@@ -103,9 +113,14 @@
       "sha256": "86204a5cb8e678da3b31f42ae45e67723edf7984f7ce47750eda76e47ac84938"
     },
     {
+      "path": "scripts/make_appcast.py",
+      "bytes": 2800,
+      "sha256": "1dab1a721f7a4b41d42ace3109069dbdee553ea7330dffc4888d29974c1af219"
+    },
+    {
       "path": "scripts/package_macos.py",
-      "bytes": 4310,
-      "sha256": "aacb8fb0e6919856b88043d1379cefba592f0b07930c26f947de615e740a0fd4"
+      "bytes": 5788,
+      "sha256": "1335942f20904a7902d462bf5f68d65288e66e5883df78c0bb55caea8ca733f9"
     },
     {
       "path": "skills/roadmap-dashboard-sync/SKILL.md",
@@ -114,8 +129,13 @@
     },
     {
       "path": "src/Monitor.swift",
-      "bytes": 73947,
-      "sha256": "7e7ef7b98c699c341d365d71a0a4b0eb463698db0a8d8a549dbaaec0ec5f1622"
+      "bytes": 77023,
+      "sha256": "16d60c46fa614528467a77b14a736a9701a42869836bfa979b2e7d5324dc93bc"
+    },
+    {
+      "path": "src/Updater.swift",
+      "bytes": 5720,
+      "sha256": "0ab47a0dfd50bc9ed72b93b71ab90e91a88e72d1e2d8817473db13bc58178ea2"
     },
     {
       "path": "src/app.js",
@@ -201,6 +221,31 @@
       "path": "tests/test_sync.py",
       "bytes": 11139,
       "sha256": "54a7f3f6da70518bde87bc0517ce5247679f85529782faa05041925ad0f3e91b"
+    },
+    {
+      "path": "tests/updater/RelaunchReceipt.m",
+      "bytes": 700,
+      "sha256": "30965a601ea60a9002ca7758a97897010c40181c41ef5c58b127f579258510eb"
+    },
+    {
+      "path": "tests/updater/SettingsHarness.swift",
+      "bytes": 4039,
+      "sha256": "edcdf2f909a54858868cd804c63753acad4e657363600aac119f30e4bdea45b4"
+    },
+    {
+      "path": "tests/updater/UpdaterHarness.m",
+      "bytes": 3283,
+      "sha256": "605d663020b55b610253632dffa01dd14824b58d21a62f47d93220c0cfe4f236"
+    },
+    {
+      "path": "updates/appcast.xml",
+      "bytes": 1119,
+      "sha256": "0113fe0b2583c1c90828acc6864ee08b14c55e00951c4b38b97cd367eecd9092"
+    },
+    {
+      "path": "updates/public-key.txt",
+      "bytes": 45,
+      "sha256": "2b9d0cc41d9254b88b6477f41c7c363f280f8561bef60156927cebeb5e750580"
     },
     {
       "path": "\u9884\u89c8\u4e2d\u6587\u7248.command",

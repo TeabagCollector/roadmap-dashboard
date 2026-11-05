@@ -24,7 +24,7 @@ Roadmap search matches existing task names and project labels already loaded int
 
 ## Network and model use
 
-Core monitoring, file synchronization and demo mode make no network or background model calls. The menu-bar Check for Updates action opens the public GitHub releases page only on an explicit click; there is no scheduled update check or automatic download. Shortcut preferences are stored locally in shortcut.json, separately from connection and roadmap data. Opening a real conversation explicitly uses its supported desktop link. Agent-side planning can use the model already serving that conversation; that work is subject to the model account's normal usage limits.
+Core monitoring, file synchronization and demo mode make no network or background model calls. In prebuilt apps with Sparkle, manual update checks and explicitly enabled background update checks access this project's public GitHub feed and release archives over HTTPS. Background checking is off until chosen and normally runs daily. Optional automatic downloading also allows installation on quit; it does not force a restart. No account or model API is used. Sparkle system profiling is disabled; normal network-request metadata is visible to the download hosts. Update choices are stored in macOS application preferences, and shortcut preferences remain in local shortcut.json. Opening a real conversation explicitly uses its supported desktop link. Agent-side planning can use the model already serving that conversation; that work is subject to the model account's normal usage limits.
 
 ## Source archives
 

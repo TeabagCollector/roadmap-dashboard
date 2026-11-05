@@ -6,7 +6,7 @@ An independent macOS companion for local work in ChatGPT Desktop.
 
 为 macOS 上的 ChatGPT Desktop 本机工作设计的独立伴随面板：跨项目看对话、留意新回复，把任务展开成可以逐步核验的清单。
 
-[**下载 macOS 测试版**](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5) · [English](README.md) · [三步入门](#三步入门) · [完整接入指南](docs/CONNECT.md) · [数据读写](docs/PRIVACY.md)
+[**下载 macOS 测试版**](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6) · [English](README.md) · [三步入门](#三步入门) · [完整接入指南](docs/CONNECT.md) · [数据读写](docs/PRIVACY.md)
 
 <a href="docs/preview-zh.png"><img src="docs/preview-zh.png" alt="Dashboard for Codex 中文暖纸主题：工作对话与可展开路线清单" width="340"></a>
 
@@ -24,19 +24,19 @@ An independent macOS companion for local work in ChatGPT Desktop.
 
 对话区和清单区可拖动调整、独立滚动；支持五种主题和中英界面切换。“我的清单”旁直接点 **排序** 调整顺序，**显示** 可选紧凑概览、隐藏已完成步骤及 3 / 5 / 8 / 不限的条数，重启保留设置。支持 **⌘F** 本机任务/项目搜索、**⌘,** 显示设置和三档文字大小，搜索词不保存。[设计取舍与对比](docs/DESIGN.md)。普通安装只需下载 → 拖入 Applications → 打开接入，SHA256 校验可选。
 
-首次启动可选择开启 **⌘D**，用于全局唤起或隐藏已激活的面板；顶部菜单栏图标可随时开关，快捷键冲突会明确提示并支持重试。同一菜单的 **检查更新…** 可打开下载页，手动替换新版会保留本机数据。
+首次启动可选择开启 **⌘D**，用于全局唤起或隐藏已激活的面板；顶部菜单栏图标可随时开关，快捷键冲突会明确提示并支持重试。同一菜单的 **检查更新…** 在预编译应用内检查新版；**更新设置…** 可选择每天检查及自动下载、退出时安装。旧版本需手动升级一次，本机数据保留。[更新机制与构建说明](docs/UPDATES.md)。
 
 ## 三步入门
 
-**Apple silicon 应用：** [下载 v0.5.0-preview.5](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截。请先阅读[安装说明](docs/INSTALL-MACOS.md)。
+**Apple silicon 应用：** [下载 v0.5.0-preview.6](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截。请先阅读[安装说明](docs/INSTALL-MACOS.md)。
 
-如果选择**源码安装**，需要 macOS 15+、Swift 6 命令行工具和 Python 3.9+。
-
-1. **安装。** [下载源码预览](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5)，解压后运行 `Install.command`。只想先看看，可以在浏览器打开 `src/index.html`。
+1. **安装。** [下载 DMG](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6)，把 **Dashboard for Codex.app** 拖入 Applications，推出镜像后打开应用。
 2. **开始追踪。** 首次打开会检测默认的本机 Codex 工作记录。找到后点“开始追踪真实工作”；保持勾选“同时启用任务路线同步”，可在同一次操作中安装独立同步 skill，不需要登录或 API Key。未找到时，先在 Codex 开一次本机工作对话，或选择正确的记录文件夹。
 3. **照常开工。** 接入后就能读取已有本机对话状态。新开受支持的 Codex 工作对话、交付具体任务，让 agent 发现同步 skill；已打开的对话可调用一次 `$roadmap-dashboard-sync` 接入。路线由当前 agent 在计划、交付等节点维护，不把所有消息自动转成任务；已有清单仍可在设置中选 `ledger.json` 共享。
 
-浏览器预览只使用虚构数据，不能接入真实文件。源码构建的应用和数据目录沿用 Roadmap Dashboard Preview 名称；预编译候选应用名为 Dashboard for Codex。依赖检查、手动未读、共享清单和卸载见[完整指南](docs/CONNECT.md)。
+开发者选择**源码安装**时，需要 macOS 15+、Swift 6 命令行工具和 Python 3.9+；解压源码后运行 `Install.command`。
+
+浏览器预览只使用虚构数据，不能接入真实文件。源码构建的应用和数据目录沿用 Roadmap Dashboard Preview 名称；下载版应用名为 Dashboard for Codex。依赖检查、手动未读、共享清单和卸载见[完整指南](docs/CONNECT.md)。
 
 ## 同步怎么实现
 
