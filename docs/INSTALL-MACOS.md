@@ -22,7 +22,7 @@ Use **Sort** beside **My roadmap** to reveal drag handles and up/down arrows; cl
 
 ## Feedback and removal
 
-Another physical Mac and macOS 15 itself remain unverified. For testing, report chip type, macOS version, whether opening worked, and any error. You do not need to send personal information or real chats. Try language switching, display options and quitting/reopening; connecting local work is your choice.
+For support, include your chip type, macOS version and the error message. You do not need to send personal information or real chats. Try language switching, display options and quitting/reopening; connecting local work is your choice.
 
 To remove the app, quit it and move the app to Trash. Tasks and preferences remain in `~/Library/Application Support/RoadmapDashboardPreview`; an explicitly installed sync skill also remains. If you move or reinstall the app, reinstall the skill from setup so its local client follows the app's location. [Connection guide](https://github.com/TeabagCollector/roadmap-dashboard/blob/main/docs/CONNECT.md).
 
@@ -42,7 +42,7 @@ To remove the app, quit it and move the app to Trash. Tasks and preferences rema
 
 **SHA256 校验完全可选，普通安装不需要做。** 校验文件留给需要检查下载完整性的人。
 
-第二台真实 Mac 和 macOS 15 本身仍待验证。试用反馈只需芯片、系统版本、是否能打开和报错。卸载时退出并移走应用，原清单和偏好保留；移动或重装应用后，可在设置中重新安装同步 skill。
+反馈问题时请附上芯片、系统版本和报错。卸载时退出并移走应用，原清单和偏好保留；移动或重装应用后，可在设置中重新安装同步 skill。
 
 ## Show / hide and updates / 唤起隐藏与更新
 

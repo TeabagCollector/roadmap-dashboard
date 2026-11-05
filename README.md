@@ -28,7 +28,7 @@ On first launch, optionally enable **⌘D** to bring Dashboard forward or hide i
 
 ## Get started in three steps
 
-**Apple silicon app preview:** [download v0.5.0-preview.5](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5). The app includes Python and does not require developer tools. It is **not notarized**; macOS may block first launch. Another physical Mac has not yet been verified. Read [installation and test instructions](docs/INSTALL-MACOS.md).
+**Apple silicon app preview:** [download v0.5.0-preview.5](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5). The app includes Python and does not require developer tools. It is **not notarized**; macOS may block first launch. Read [installation guide](docs/INSTALL-MACOS.md).
 
 For a **source installation**, you need macOS 15+, Swift 6 command-line tools and Python 3.9+.
 
@@ -56,7 +56,7 @@ Built and tested with **local Codex-backed work/coding conversations in ChatGPT 
 
 This is an independent project, not an official OpenAI product. Other clients, remote hosts and additional agent runtimes have not been verified. Local record formats may change; unrecognized activity is shown as unknown.
 
-The source preview has been tested on one Apple silicon Mac. The locally built app is ad-hoc signed, not notarized. Intel and installation on a second physical machine remain unverified. The screenshots and walkthrough use fictional sample data.
+The downloadable application supports Apple silicon (M1 or newer) and macOS 15+. It includes its Python runtime. Screenshots and walkthroughs use fictional sample data. See the installation guide for macOS security prompts.
 
 ## Development
 

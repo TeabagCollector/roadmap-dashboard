@@ -24,13 +24,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 6126,
-      "sha256": "7e544a550f579048ce3a54fc59731a1d65c0afd04e1c87d653693753991ce6bc"
+      "bytes": 6040,
+      "sha256": "366c8655270fdea21723ae4e98b0fee833a8e6aac8d45d5b1c50b4b804a51212"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 5428,
-      "sha256": "f5ced7254aae156314b81fb40e16f659958add044fd2b826af2508cf5ed49096"
+      "bytes": 5379,
+      "sha256": "0f23978f1e078b1b989bf14abcb0f679d7a9037eb0ba281da410cd105477af50"
     },
     {
       "path": "build.sh",
@@ -49,13 +49,13 @@
     },
     {
       "path": "docs/DESIGN.md",
-      "bytes": 4122,
-      "sha256": "1fb684c2613eab2ff4827ec6e3f6b0dceb40a70a7c1f423911848347d68a562f"
+      "bytes": 4039,
+      "sha256": "1ef1535733f82a5411866561b33abae249253a011e409765194bcb091e8b42b4"
     },
     {
       "path": "docs/INSTALL-MACOS.md",
-      "bytes": 6781,
-      "sha256": "d053bdfc590bf292a6d2030aead03f159505babe216968b0dc0d1a0bcae85c39"
+      "bytes": 6644,
+      "sha256": "2b5ce68334a9b1872489caba184f68e86c4369fd5c31007831edf329b457eea4"
     },
     {
       "path": "docs/LANDSCAPE.md",

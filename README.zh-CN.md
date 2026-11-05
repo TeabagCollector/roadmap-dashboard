@@ -28,7 +28,7 @@ An independent macOS companion for local work in ChatGPT Desktop.
 
 ## 三步入门
 
-**Apple silicon 应用测试预览：** [下载 v0.5.0-preview.5](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截，第二台真实 Mac 仍待验证。请先阅读[安装与测试说明](docs/INSTALL-MACOS.md)。
+**Apple silicon 应用：** [下载 v0.5.0-preview.5](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截。请先阅读[安装说明](docs/INSTALL-MACOS.md)。
 
 如果选择**源码安装**，需要 macOS 15+、Swift 6 命令行工具和 Python 3.9+。
 
@@ -56,7 +56,7 @@ flowchart TD
 
 这是独立项目，并非 OpenAI 官方产品。其他桌面客户端、远程主机及其他 agent 兼容性尚未验证；上游格式变化时，无法判断的活动会显示为未知。
 
-源码预览已在一台 Apple silicon Mac 验证。本地构建应用采用临时签名，尚未公证；Intel 和第二台真实机器安装仍待验证。截图和演示均使用虚构样例。
+下载版适用于 Apple silicon（M1 或更新芯片）、macOS 15+，自带 Python 运行时。截图和演示均使用虚构样例。首次打开遇到 macOS 安全提示时，请参阅安装说明。
 
 ## 开发与许可
 

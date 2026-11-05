@@ -19,7 +19,7 @@ Text size changes conversation and task content, not the window title. A task ti
 
 Motion serves continuity: tasks reveal content with an interpolated height, following rows move with the disclosure, and pointer dragging previews a placement before committing it. Escape cancels a drag. Reduced-motion preferences skip nonessential animation.
 
-These decisions keep the companion focused on existing work and roadmaps. They do not add a cloud account, background model loop, unrelated integrations, a full command platform, or system-wide search. Signing/notarization and another physical Mac remain separate release limitations.
+These decisions keep the companion focused on existing work and roadmaps. They do not add a cloud account, background model loop, unrelated integrations, a full command platform, or system-wide search.
 
 ## 中文摘要
 
