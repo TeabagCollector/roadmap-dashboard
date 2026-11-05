@@ -54,6 +54,12 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
     var hotKeyHandler: EventHandlerRef?
     var hotKeyPressed = false
     let hotKeyID = EventHotKeyID(signature:0x44415348,id:1) // DASH
+    var shortcutEnabled=false
+    var shortcutConfigured=false
+    var shortcutStatus:OSStatus = noErr
+    var shortcutAlert:NSAlert?
+    var shortcutPromptShown=false
+    var shortcutQA:Bool { CommandLine.arguments.contains("--shortcut-smoke") || CommandLine.arguments.contains("--shortcut-restore") || CommandLine.arguments.contains("--shortcut-conflict") || CommandLine.arguments.contains("--shortcut-decline") }
     var hotKeyQA = CommandLine.arguments.contains("--hotkey-smoke")
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -126,12 +132,9 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         web.loadFileURL(index,allowingReadAccessTo:Bundle.main.resourceURL!)
         statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
         statusItem.button?.image = NSImage(systemSymbolName:"rectangle.stack",accessibilityDescription:"Dashboard")
-        let menu = NSMenu()
-        menu.addItem(withTitle:language == "en" ? "Show / Hide Dashboard" : "显示 / 隐藏 Dashboard",action:#selector(togglePanel),keyEquivalent:"")
-        menu.addItem(withTitle:language == "en" ? "Quit Dashboard" : "退出 Dashboard",action:#selector(quit),keyEquivalent:"q")
-        menu.items.forEach { $0.target = self }
-        statusItem.menu = menu
-        if liveMode && connection["globalShortcut"] as? Bool == true && (hotKeyQA || (!qa && !restore && !captureOnly)) { registerHotKey() }
+        loadShortcutPreference()
+        updateMenuLanguage()
+        if shortcutEnabled && (hotKeyQA || shortcutQA || (!qa && !restore && !captureOnly)) { registerHotKey() }
         if !qa && !restore && !captureOnly && !hotKeyQA { panel.orderFrontRegardless() }
         if hotKeyQA {
             panel.setFrameOrigin(NSPoint(x:-10000,y:-10000))
@@ -151,9 +154,127 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         else { NSApp.activate(ignoringOtherApps:true);panel.makeKeyAndOrderFront(nil) }
     }
     func updateMenuLanguage() {
-        guard let menu=statusItem?.menu,menu.items.count>=2 else { return }
-        menu.items[0].title=language == "en" ? "Show / Hide Dashboard" : "显示 / 隐藏 Dashboard"
-        menu.items[1].title=language == "en" ? "Quit Dashboard" : "退出 Dashboard"
+        guard statusItem != nil else { return }
+        let en=language == "en",menu=NSMenu()
+        let show=NSMenuItem(title:en ? "Show / Hide Dashboard" : "显示 / 隐藏 Dashboard",action:#selector(togglePanel),keyEquivalent:"")
+        menu.addItem(show)
+        menu.addItem(.separator())
+        let toggle=NSMenuItem(title:en ? "Enable ⌘D Global Shortcut" : "启用 ⌘D 全局快捷键",action:#selector(toggleShortcut),keyEquivalent:"")
+        toggle.state=shortcutEnabled ? .on : .off;menu.addItem(toggle)
+        if shortcutEnabled && shortcutStatus != noErr {
+            let error=NSMenuItem(title:en ? "⌘D unavailable — another app may be using it" : "⌘D 不可用，可能已被其他应用占用",action:nil,keyEquivalent:"")
+            error.isEnabled=false;menu.addItem(error)
+            menu.addItem(withTitle:en ? "Retry ⌘D" : "重试 ⌘D",action:#selector(retryShortcut),keyEquivalent:"")
+        }
+        menu.addItem(.separator())
+        menu.addItem(withTitle:en ? "Check for Updates…" : "检查更新…",action:#selector(checkForUpdates),keyEquivalent:"")
+        menu.addItem(withTitle:en ? "Quit Dashboard" : "退出 Dashboard",action:#selector(quit),keyEquivalent:"q")
+        menu.items.forEach { $0.target=self }
+        statusItem.menu=menu
+        statusItem.button?.toolTip=shortcutEnabled && shortcutStatus == noErr ? "Dashboard · ⌘D" : "Dashboard"
+    }
+    @objc func checkForUpdates() {
+        // Explicit click only; GitHub's /latest excludes preview releases.
+        NSWorkspace.shared.open(URL(string:"https://github.com/TeabagCollector/roadmap-dashboard/releases")!)
+    }
+    func loadShortcutPreference() {
+        let url=baseRoot.appendingPathComponent("shortcut.json")
+        if let data=try? Data(contentsOf:url),let value=(try? JSONSerialization.jsonObject(with:data)) as? [String:Any],let enabled=value["enabled"] as? Bool {
+            shortcutEnabled=enabled;shortcutConfigured=true
+        } else if let enabled=connection["globalShortcut"] as? Bool {
+            shortcutEnabled=enabled;shortcutConfigured=true
+        }
+    }
+    @discardableResult func setShortcut(_ enabled:Bool,notify:Bool=true)->Bool {
+        do {
+            try JSONSerialization.data(withJSONObject:["version":1,"enabled":enabled]).write(to:baseRoot.appendingPathComponent("shortcut.json"),options:.atomic)
+            try FileManager.default.setAttributes([.posixPermissions:0o600],ofItemAtPath:baseRoot.appendingPathComponent("shortcut.json").path)
+        } catch {
+            let alert=NSAlert();alert.messageText=language == "en" ? "Shortcut setting could not be saved" : "快捷键设置未能保存"
+            alert.informativeText=language == "en" ? "Your existing choice is unchanged. Try again from the menu." : "原有选择已保留，请从菜单重试。"
+            alert.beginSheetModal(for:panel);return false
+        }
+        unregisterHotKey();shortcutEnabled=enabled;shortcutConfigured=true;shortcutStatus=noErr
+        if enabled { registerHotKey() }
+        updateMenuLanguage()
+        if enabled && shortcutStatus != noErr && notify { showShortcutConflict() }
+        return true
+    }
+    @objc func toggleShortcut() { setShortcut(!shortcutEnabled) }
+    @objc func retryShortcut() {
+        unregisterHotKey();shortcutStatus=noErr
+        if shortcutEnabled { registerHotKey() }
+        updateMenuLanguage()
+        if shortcutStatus != noErr { showShortcutConflict() }
+    }
+    func unregisterHotKey() {
+        if let key=hotKey { UnregisterEventHotKey(key) };hotKey=nil
+        if let handler=hotKeyHandler { RemoveEventHandler(handler) };hotKeyHandler=nil;hotKeyPressed=false
+    }
+    func showShortcutConflict() {
+        guard panel.attachedSheet == nil else { return }
+        let en=language == "en",alert=NSAlert()
+        alert.messageText=en ? "⌘D could not be enabled" : "⌘D 暂时无法启用"
+        alert.informativeText=(en ? "Another app or another Dashboard copy may already use this shortcut. Disable it there, then choose Retry ⌘D in the menu bar. You can still show and hide Dashboard from its menu. No Accessibility permission is needed." : "可能有其他应用或另一份 Dashboard 占用了此快捷键。请先在那里释放，再从菜单栏选择「重试 ⌘D」。你仍可从菜单显示和隐藏面板，无需授予辅助功能权限。")+" (\(shortcutStatus))"
+        alert.addButton(withTitle:en ? "OK" : "知道了");shortcutAlert=alert
+        alert.beginSheetModal(for:panel) { [weak self] _ in self?.shortcutAlert=nil }
+    }
+    func promptShortcut() {
+        guard !shortcutConfigured,panel.attachedSheet == nil else { return }
+        let en=language == "en",alert=NSAlert()
+        alert.messageText=en ? "Show Dashboard with ⌘D?" : "用 ⌘D 唤起 Dashboard？"
+        alert.informativeText=en ? "When Dashboard is running, press ⌘D to bring it forward; press again while active to hide it. This replaces ⌘D in other apps while enabled. You can change this choice in the menu bar. No login or Accessibility permission is required." : "Dashboard 运行时，按 ⌘D 将面板带到前面；面板已激活时再按一次隐藏。开启后会占用其他应用的 ⌘D，可随时从菜单栏关闭。无需登录或辅助功能权限。"
+        alert.addButton(withTitle:en ? "Enable ⌘D" : "开启 ⌘D")
+        alert.addButton(withTitle:en ? "Not Now" : "暂不开启")
+        shortcutAlert=alert;shortcutPromptShown=true
+        alert.beginSheetModal(for:panel) { [weak self] response in
+            guard let self=self else { return };self.shortcutAlert=nil
+            _=self.setShortcut(response == .alertFirstButtonReturn,notify:false)
+            if self.shortcutEnabled && self.shortcutStatus != noErr { DispatchQueue.main.async { self.showShortcutConflict() } }
+        }
+    }
+    func runShortcutQA() {
+        let restoring=CommandLine.arguments.contains("--shortcut-restore")
+        var blocker:EventHotKeyRef?
+        if CommandLine.arguments.contains("--shortcut-conflict") {
+            let result=RegisterEventHotKey(UInt32(kVK_ANSI_D),UInt32(cmdKey),EventHotKeyID(signature:0x54455354,id:77),GetApplicationEventTarget(),0,&blocker)
+            writeReport(["registered":result == noErr,"status":result],"shortcut-blocker.json")
+        }
+        if !shortcutConfigured { promptShortcut() }
+        let prompt=shortcutPromptShown
+        DispatchQueue.main.asyncAfter(deadline:.now()+0.25) {
+            if let alert=self.shortcutAlert {
+                if let view=alert.window.contentView,let bitmap=view.bitmapImageRepForCachingDisplay(in:view.bounds) {
+                    view.cacheDisplay(in:view.bounds,to:bitmap)
+                    if let image=bitmap.representation(using:.png,properties:[:]) { try? image.write(to:self.dataRoot.appendingPathComponent("shortcut-prompt-qa.png")) }
+                }
+                alert.buttons[CommandLine.arguments.contains("--shortcut-decline") ? 1 : 0].performClick(nil)
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline:.now()+0.9) {
+            let conflict=CommandLine.arguments.contains("--shortcut-conflict"),decline=CommandLine.arguments.contains("--shortcut-decline") || (restoring && !self.shortcutEnabled)
+            let data=(try? Data(contentsOf:self.baseRoot.appendingPathComponent("shortcut.json"))).flatMap { try? JSONSerialization.jsonObject(with:$0) } as? [String:Any] ?? [:]
+            let conflictVisible=self.shortcutAlert != nil && self.panel.attachedSheet != nil
+            let result:[String:Any]=["firstPromptShown":prompt,"restored":restoring && !prompt,"enabled":self.shortcutEnabled,"registered":self.hotKey != nil,"saved":data["enabled"] as? Bool == !decline,"conflictStatus":self.shortcutStatus,"conflictVisible":conflictVisible,"retryMenuVisible":self.statusItem.menu?.items.contains(where:{$0.action == #selector(self.retryShortcut)}) ?? false,"sampleMode":!self.liveMode,"passed":(restoring ? !prompt : prompt) && (decline ? !self.shortcutEnabled && self.hotKey == nil : conflict ? conflictVisible && self.hotKey == nil && self.shortcutStatus != noErr : self.hotKey != nil)]
+            self.writeReport(result,"shortcut-settings-qa.json")
+            if conflict {
+                self.shortcutAlert?.buttons.first?.performClick(nil)
+                if let held=blocker { UnregisterEventHotKey(held) }
+                DispatchQueue.main.asyncAfter(deadline:.now()+0.2) {
+                    self.retryShortcut()
+                    self.writeReport(["registeredAfterRetry":self.hotKey != nil,"status":self.shortcutStatus],"shortcut-retry-qa.json")
+                    self.runHotKeyQA()
+                }
+            } else if decline { NSApp.terminate(nil) }
+            else {
+                self.toggleShortcut()
+                let disabled=self.hotKey == nil && !self.shortcutEnabled
+                self.toggleShortcut()
+                let enabled=self.hotKey != nil && self.shortcutEnabled
+                self.writeReport(["disabled":disabled,"reenabled":enabled,"checked":self.statusItem.menu?.items.first(where:{$0.action == #selector(self.toggleShortcut)})?.state == .on,"updateEntry":self.statusItem.menu?.items.contains(where:{$0.action == #selector(self.checkForUpdates)}) ?? false],"shortcut-menu-qa.json")
+                self.runHotKeyQA()
+            }
+        }
     }
     @objc func quit() { NSApp.terminate(nil) }
     func applicationShouldHandleReopen(_ sender:NSApplication,hasVisibleWindows flag:Bool)->Bool { panel.orderFrontRegardless();return false }
@@ -164,11 +285,11 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
     }
     func applicationWillTerminate(_ notification:Notification) {
         timer?.invalidate()
-        if let key=hotKey { UnregisterEventHotKey(key) }
-        if let handler=hotKeyHandler { RemoveEventHandler(handler) }
+        unregisterHotKey()
         if watcher?.isRunning == true { watcher?.terminate() }
     }
     func registerHotKey() {
+        guard hotKey == nil else { return }
         var specs=[EventTypeSpec(eventClass:OSType(kEventClassKeyboard),eventKind:UInt32(kEventHotKeyPressed)),EventTypeSpec(eventClass:OSType(kEventClassKeyboard),eventKind:UInt32(kEventHotKeyReleased))]
         let callback:EventHandlerUPP = { _,event,data in
             guard let event=event,let data=data else { return OSStatus(eventNotHandledErr) }
@@ -183,13 +304,11 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
         let installed=InstallEventHandler(GetApplicationEventTarget(),callback,2,&specs,Unmanaged.passUnretained(self).toOpaque(),&hotKeyHandler)
         let status=installed == noErr ? RegisterEventHotKey(UInt32(kVK_ANSI_D),UInt32(cmdKey),hotKeyID,GetApplicationEventTarget(),0,&hotKey) : installed
         writeReport(["registered":status == noErr,"status":status,"shortcut":"Command+D","requiresAccessibility":false],hotKeyQA ? "hotkey-qa-registration.json" : "hotkey-registration.json")
-        if status != noErr {
-            if let handler=hotKeyHandler { RemoveEventHandler(handler);hotKeyHandler=nil }
-            statusItem.button?.toolTip="Dashboard · ⌘D 注册失败，使用菜单显示/隐藏"
-            let note=NSMenuItem(title:"⌘D 不可用，请使用上方菜单（\(status)）",action:nil,keyEquivalent:"")
-            statusItem.menu?.insertItem(note,at:1)
-        } else { statusItem.button?.toolTip="Dashboard · ⌘D 显示 / 隐藏" }
+        shortcutStatus=status
+        if status != noErr { unregisterHotKey() }
+        updateMenuLanguage()
     }
+
     func runHotKeyQA() {
         let previousApp=NSWorkspace.shared.frontmostApplication
         func dispatch(_ kind:UInt32,_ id:EventHotKeyID)->OSStatus {
@@ -298,9 +417,26 @@ final class MonitorDelegate: NSObject, NSApplicationDelegate, WKScriptMessageHan
             updateMenuLanguage()
             call("centralLoadPreferences",preferences)
             ready=true;loadSnapshot()
-            if !liveMode && !qa && !restore && !captureOnly && !hotKeyQA && !onboardingQA && connection.isEmpty { web.evaluateJavaScript("window.centralOpenSetup()",completionHandler:nil) }
+            if !liveMode && !qa && !restore && !captureOnly && !hotKeyQA && !shortcutQA && !onboardingQA && connection.isEmpty { web.evaluateJavaScript("window.centralOpenSetup()",completionHandler:nil) }
+            if !qa && !restore && !captureOnly && !hotKeyQA && !shortcutQA && !onboardingQA && !CommandLine.arguments.contains("--quick-start-smoke") && !CommandLine.arguments.contains("--first-launch-smoke") {
+                DispatchQueue.main.asyncAfter(deadline:.now()+0.4) {
+                    if !self.shortcutConfigured { self.promptShortcut() }
+                    else if self.shortcutEnabled && self.shortcutStatus != noErr { self.showShortcutConflict() }
+                }
+            }
             writeReport(["level":panel.level.rawValue,"normalWindow":panel.level == .normal,"commandD":"bring-front-if-covered;hide-if-already-active"],"window-mode.json")
-            if CommandLine.arguments.contains("--quick-start-smoke") {
+            if CommandLine.arguments.contains("--shortcut-production-smoke") {
+                DispatchQueue.main.asyncAfter(deadline:.now()+1.1) {
+                    let shown=self.shortcutPromptShown && self.panel.attachedSheet != nil
+                    self.writeReport(["productionFirstPrompt":shown,"sampleMode":!self.liveMode],"shortcut-production-qa.json")
+                    self.shortcutAlert?.buttons.first?.performClick(nil)
+                    DispatchQueue.main.asyncAfter(deadline:.now()+0.6) { self.runHotKeyQA() }
+                }
+            }
+            else if shortcutQA {
+                DispatchQueue.main.asyncAfter(deadline:.now()+0.5) { self.runShortcutQA() }
+            }
+            else if CommandLine.arguments.contains("--quick-start-smoke") {
                 DispatchQueue.main.asyncAfter(deadline:.now()+1) { self.runQuickStartQA() }
             }
             else if CommandLine.arguments.contains("--first-launch-smoke") {

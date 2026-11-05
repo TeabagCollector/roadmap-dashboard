@@ -24,13 +24,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 5812,
-      "sha256": "20dc7960392375bcfd49d8cb06b3fa0312af0dcbc5f013fc11f6bec06ef8f6e6"
+      "bytes": 6126,
+      "sha256": "7e544a550f579048ce3a54fc59731a1d65c0afd04e1c87d653693753991ce6bc"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 5153,
-      "sha256": "ff3396e7b6076e049c9c309883eb8b1846b50538ad071aaa7c14c7710ddf42ff"
+      "bytes": 5428,
+      "sha256": "f5ced7254aae156314b81fb40e16f659958add044fd2b826af2508cf5ed49096"
     },
     {
       "path": "build.sh",
@@ -54,8 +54,8 @@
     },
     {
       "path": "docs/INSTALL-MACOS.md",
-      "bytes": 4819,
-      "sha256": "90d0c87f037f49284b5a4403ba0a1cace289aa726a8c2026829a914df19e8f38"
+      "bytes": 6781,
+      "sha256": "d053bdfc590bf292a6d2030aead03f159505babe216968b0dc0d1a0bcae85c39"
     },
     {
       "path": "docs/LANDSCAPE.md",
@@ -64,8 +64,8 @@
     },
     {
       "path": "docs/PRIVACY.md",
-      "bytes": 3024,
-      "sha256": "7bc61b74bd6ef13c8ae203bfe2173b92e5f8c3ea3e00d77a04addd8578e8227b"
+      "bytes": 3288,
+      "sha256": "7413e9c54470b07cc5a98f90968f710269cbce4b7ef93f5c6881641039a6ade8"
     },
     {
       "path": "docs/demo-en.gif",
@@ -105,7 +105,7 @@
     {
       "path": "scripts/package_macos.py",
       "bytes": 4310,
-      "sha256": "57167ce539586fc66583ec7bdc319ab38b9417f8790282af2d981f486f2da61d"
+      "sha256": "aacb8fb0e6919856b88043d1379cefba592f0b07930c26f947de615e740a0fd4"
     },
     {
       "path": "skills/roadmap-dashboard-sync/SKILL.md",
@@ -114,8 +114,8 @@
     },
     {
       "path": "src/Monitor.swift",
-      "bytes": 63982,
-      "sha256": "93f0544d2fba3204c049fccb7b6464c00ac6dd66045a317fa89a7a158854d318"
+      "bytes": 73947,
+      "sha256": "7e7ef7b98c699c341d365d71a0a4b0eb463698db0a8d8a549dbaaec0ec5f1622"
     },
     {
       "path": "src/app.js",

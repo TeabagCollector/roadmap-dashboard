@@ -6,7 +6,7 @@ An independent macOS companion for local work in ChatGPT Desktop.
 
 Follow work across projects, catch new replies, and expand each task into a checklist you can verify step by step.
 
-[**Download macOS test preview**](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.4) · [简体中文](README.zh-CN.md) · [Get started](#get-started-in-three-steps) · [Setup guide](docs/CONNECT.md) · [Data handling](docs/PRIVACY.md)
+[**Download macOS test preview**](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5) · [简体中文](README.zh-CN.md) · [Get started](#get-started-in-three-steps) · [Setup guide](docs/CONNECT.md) · [Data handling](docs/PRIVACY.md)
 
 <a href="docs/preview-en.png"><img src="docs/preview-en.png" alt="Dashboard for Codex: warm paper theme with working conversations and an expanded roadmap" width="340"></a>
 
@@ -24,13 +24,15 @@ A 14-second sample-data walkthrough of the public interface. Conversation events
 
 The panel has independently scrollable sections, a draggable divider, five themes, and English / Simplified Chinese switching. Use **Sort** beside **My roadmap** to arrange tasks. **View** offers a compact overview, hiding completed steps, and a 3 / 5 / 8 / all step limit. Use **⌘F** to search task names or projects locally, and **⌘,** for view settings including text size. Search queries are not saved. Settings persist across restarts. [Design decisions and comparisons](docs/DESIGN.md). Checksums are optional; normal installation is download → drag into Applications → open and connect.
 
+On first launch, optionally enable **⌘D** to bring Dashboard forward or hide it while active. Change it anytime from the menu-bar icon; shortcut conflicts show a clear message and a retry option. **Check for Updates…** in the same menu opens the releases page for manual upgrades, preserving your local data.
+
 ## Get started in three steps
 
-**Apple silicon app preview:** [download v0.5.0-preview.4](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.4). The app includes Python and does not require developer tools. It is **not notarized**; macOS may block first launch. Another physical Mac has not yet been verified. Read [installation and test instructions](docs/INSTALL-MACOS.md).
+**Apple silicon app preview:** [download v0.5.0-preview.5](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5). The app includes Python and does not require developer tools. It is **not notarized**; macOS may block first launch. Another physical Mac has not yet been verified. Read [installation and test instructions](docs/INSTALL-MACOS.md).
 
 For a **source installation**, you need macOS 15+, Swift 6 command-line tools and Python 3.9+.
 
-1. **Install.** [Download the source preview](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.4), extract it, and run `Install.command`. For a no-install look, open `src/index.html` in a browser.
+1. **Install.** [Download the source preview](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.5), extract it, and run `Install.command`. For a no-install look, open `src/index.html` in a browser.
 2. **Start tracking.** On first launch, the app checks the default local Codex work-data folder. When found, click **Start tracking real work**. Leave **Also enable roadmap tracking** selected to install the separate sync skill in the same action. No login or API key is needed. If nothing is found, start a local work chat in Codex or choose its data folder.
 3. **Do real work.** Existing local conversation status appears after connection. Start a new supported Codex work chat with a concrete task so it can discover the installed roadmap skill. For an already-open chat, invoke `$roadmap-dashboard-sync` once. The working agent maintains the roadmap at plan and delivery checkpoints; the panel does not invent tasks from every message. An existing `ledger.json` can still be shared from setup.
 
