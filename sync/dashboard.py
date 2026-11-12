@@ -88,16 +88,19 @@ def mutate(request, data=DATA):
                 step['text'] = clean(source['text'])
                 step['criterion'] = clean(source.get('criterion') or '完成后记录验证结果')
                 previous_reported = step.get('reported')
-                step['reported'] = source.get('status', 'pending')
-                if step['reported'] not in ('pending', 'in_progress', 'completed'):
+                # A partial plan edit must not reopen accepted or blocked work.
+                # Only an explicitly supplied status changes an existing step.
+                step['reported'] = source.get('status', step.get('reported', 'pending'))
+                if step['reported'] not in ('pending', 'in_progress', 'completed', 'blocked'):
                     raise ValueError('不支持的步骤状态')
-                # An agent plan reports progress; it cannot silently erase a manual choice.
-                if step['reported'] == 'completed' and not step.get('done'):
-                    step['needsReview'] = True
-                elif step['reported'] != 'completed':
-                    step['needsReview'] = False
-                    if previous_reported == 'completed' and step.get('done') and step.get('source') != 'user':
-                        step.update(done=False, source='reopened-plan', evidence='计划重新打开本步骤，需重新核验')
+                if 'status' in source or source['id'] not in old:
+                    # An agent plan reports progress; it cannot silently erase a manual choice.
+                    if step['reported'] == 'completed' and not step.get('done'):
+                        step['needsReview'] = True
+                    elif step['reported'] != 'completed':
+                        step['needsReview'] = False
+                        if previous_reported == 'completed' and step.get('done') and step.get('source') != 'user':
+                            step.update(done=False, source='reopened-plan', evidence='计划重新打开本步骤，需重新核验')
                 new.append(step)
             removed = [s for s in task['steps'] if s['id'] not in ids]
             if removed:

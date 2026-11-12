@@ -3,14 +3,14 @@
   <channel>
     <title>Dashboard for Codex updates</title>
     <item>
-      <title>Dashboard for Codex 0.5.0-preview.6</title>
-      <sparkle:version>10</sparkle:version>
-      <sparkle:shortVersionString>0.5.0-preview.6</sparkle:shortVersionString>
+      <title>Dashboard for Codex 0.5.0-preview.7</title>
+      <sparkle:version>11</sparkle:version>
+      <sparkle:shortVersionString>0.5.0-preview.7</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
       <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
       <link>https://github.com/TeabagCollector/roadmap-dashboard/releases</link>
       <description>Update Dashboard for Codex. Local roadmaps and preferences are retained. / 更新 Dashboard，保留本机清单与偏好。</description>
-      <enclosure url="https://github.com/TeabagCollector/roadmap-dashboard/releases/download/v0.5.0-preview.6/Dashboard-for-Codex-0.5.0-preview.6-macos-arm64.zip" sparkle:edSignature="kDBP7cr/FWC5ZLHkSKlwVLHyNGgS99rqwcrUL5kIHX6ye+mHanMDY4VqxiM2tsUsclZ/IgQNPkuzwDacKDkUDw==" length="25521141" type="application/octet-stream" />
+      <enclosure url="https://github.com/TeabagCollector/roadmap-dashboard/releases/download/v0.5.0-preview.7/Dashboard-for-Codex-0.5.0-preview.7-macos-arm64.zip" sparkle:edSignature="f+l74a50WxFMgVFH96DjoFrV9c67EJHIMCKx6A2PiDatoNxwJ9164rxb+Xdd1MM+QNnBffAkKVPUwayAiGcoBQ==" length="25521231" type="application/octet-stream" />
     </item>
   </channel>
 </rss>

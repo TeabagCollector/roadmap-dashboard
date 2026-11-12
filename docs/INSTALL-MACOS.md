@@ -1,10 +1,10 @@
 # Install Dashboard for Codex / 安装说明
 
-Apple silicon (M1 or newer), macOS 15+ deployment target. Version **0.5.0-preview.6** includes Python; no extra login, API key or developer tools are needed.
+Apple silicon (M1 or newer), macOS 15+ deployment target. Version **0.5.0-preview.7** includes Python; no extra login, API key or developer tools are needed.
 
 ## Three steps
 
-1. **Download the DMG** from the [test release](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6). Choose the `.dmg`; the application ZIP is an alternative and the source ZIP is for developers.
+1. **Download the DMG** from the [test release](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.7). Choose the `.dmg`; the application ZIP is an alternative and the source ZIP is for developers.
 2. **Drag Dashboard for Codex.app into Applications.** Eject the disk image and open the installed app. You can also use your own `~/Applications` folder. Quit a previous copy before replacing it.
 3. **Click Start tracking real work** when your local Codex records are found. Leave **Also enable roadmap tracking** selected to install the separate sync skill, or uncheck it for conversation monitoring alone. Missing sources are explained with retry and folder selection. In a new supported Codex work chat, give the agent a concrete task; an existing chat can invoke `$roadmap-dashboard-sync` once.
 
@@ -32,7 +32,7 @@ To remove the app, quit it and move the app to Trash. Tasks and preferences rema
 
 适用于 M1 或更新芯片的 Mac，部署目标为 macOS 15+。自带 Python，不需要另行登录、API Key 或开发工具。
 
-1. **下载 DMG**：[打开测试版下载页](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6)，选择 `.dmg` 即可。
+1. **下载 DMG**：[打开测试版下载页](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.7)，选择 `.dmg` 即可。
 2. **拖入 Applications**：复制应用后推出镜像，再从 Applications 打开；也可以放自己的 `~/Applications`。更新前先退出旧版。
 3. **点“开始追踪真实工作”**：检测到本机 Codex 记录后确认接入。同屏可一起启用任务路线同步 skill；已有对话可调用一次 `$roadmap-dashboard-sync`，新工作对话可发现该 skill。找不到来源时按提示重试或选文件夹。
 

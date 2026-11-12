@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 RUNTIME_SHA256='353d5f1b4fd2715e7053f12f068435d5bbad16b91e057006b5d01e0925709a7e'
 RUNTIME_URL='https://github.com/astral-sh/python-build-standalone/releases/download/20261026/cpython-3.12.16%2B20261026-aarch64-apple-darwin-install_only_stripped.tar.gz'
-VERSION='0.5.0-preview.6'
+VERSION='0.5.0-preview.7'
 APP='Dashboard for Codex.app'
 
 def package(archive,output,notices,sparkle):
@@ -39,7 +39,7 @@ def package(archive,output,notices,sparkle):
     for cache in app.rglob('__pycache__'):shutil.rmtree(cache)
     for lib in (resources/'python/lib').glob('*.a'):lib.unlink()
     info=plistlib.loads((app/'Contents/Info.plist').read_bytes())
-    info.update(CFBundleName='Dashboard for Codex',CFBundleDisplayName='Dashboard for Codex',CFBundleIdentifier='io.github.teabagcollector.dashboard-for-codex.preview',CFBundleShortVersionString=VERSION,CFBundleVersion='10',LSMinimumSystemVersion='15.0',LSArchitecturePriority=['arm64'])
+    info.update(CFBundleName='Dashboard for Codex',CFBundleDisplayName='Dashboard for Codex',CFBundleIdentifier='io.github.teabagcollector.dashboard-for-codex.preview',CFBundleShortVersionString=VERSION,CFBundleVersion='11',LSMinimumSystemVersion='15.0',LSArchitecturePriority=['arm64'])
     sparkle=sparkle.resolve()
     framework=sparkle/'Sparkle.framework'
     if not framework.is_dir():raise ValueError('Official Sparkle.framework directory is required')

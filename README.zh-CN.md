@@ -6,7 +6,7 @@ An independent macOS companion for local work in ChatGPT Desktop.
 
 为 macOS 上的 ChatGPT Desktop 本机工作设计的独立伴随面板：跨项目看对话、留意新回复，把任务展开成可以逐步核验的清单。
 
-[**下载 macOS 测试版**](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6) · [English](README.md) · [三步入门](#三步入门) · [完整接入指南](docs/CONNECT.md) · [数据读写](docs/PRIVACY.md)
+[**下载 macOS 测试版**](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.7) · [English](README.md) · [三步入门](#三步入门) · [完整接入指南](docs/CONNECT.md) · [数据读写](docs/PRIVACY.md)
 
 <a href="docs/preview-zh.png"><img src="docs/preview-zh.png" alt="Dashboard for Codex 中文暖纸主题：工作对话与可展开路线清单" width="340"></a>
 
@@ -28,9 +28,9 @@ An independent macOS companion for local work in ChatGPT Desktop.
 
 ## 三步入门
 
-**Apple silicon 应用：** [下载 v0.5.0-preview.6](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截。请先阅读[安装说明](docs/INSTALL-MACOS.md)。
+**Apple silicon 应用：** [下载 v0.5.0-preview.7](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.7)。自带 Python，无需安装开发工具；**尚未公证**，首次打开可能被 macOS 拦截。请先阅读[安装说明](docs/INSTALL-MACOS.md)。
 
-1. **安装。** [下载 DMG](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.6)，把 **Dashboard for Codex.app** 拖入 Applications，推出镜像后打开应用。
+1. **安装。** [下载 DMG](https://github.com/TeabagCollector/roadmap-dashboard/releases/tag/v0.5.0-preview.7)，把 **Dashboard for Codex.app** 拖入 Applications，推出镜像后打开应用。
 2. **开始追踪。** 首次打开会检测默认的本机 Codex 工作记录。找到后点“开始追踪真实工作”；保持勾选“同时启用任务路线同步”，可在同一次操作中安装独立同步 skill，不需要登录或 API Key。未找到时，先在 Codex 开一次本机工作对话，或选择正确的记录文件夹。
 3. **照常开工。** 接入后就能读取已有本机对话状态。新开受支持的 Codex 工作对话、交付具体任务，让 agent 发现同步 skill；已打开的对话可调用一次 `$roadmap-dashboard-sync` 接入。路线由当前 agent 在计划、交付等节点维护，不把所有消息自动转成任务；已有清单仍可在设置中选 `ledger.json` 共享。
 

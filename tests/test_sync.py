@@ -25,6 +25,23 @@ class SyncTests(unittest.TestCase):
   self.plan();self.request(op='accept',taskId='t',stepId='one',evidence='Earlier verified work')
   self.plan([{'id':'one','text':'Build','status':'in_progress'}]);step=d.mutate({'op':'get'},self.root)['tasks'][0]['steps'][0]
   self.assertFalse(step['done']);self.assertFalse(step['needsReview'])
+ def test_append_plan_preserves_verified_review_and_manual_states(self):
+  self.plan([{'id':'one','text':'Accepted','status':'completed'},{'id':'review','text':'Reported','status':'completed'},{'id':'manual','text':'Manual','status':'completed'}])
+  self.request(op='accept',taskId='t',stepId='one',evidence='Verified original delivery')
+  self.request(op='check',taskId='t',stepId='manual',done=False)
+  before=d.mutate({'op':'get'},self.root)['tasks'][0]['steps']
+  copied=[dict(s) for s in before]+[{'id':'new','text':'Follow-up'}]
+  self.plan(copied)
+  after=d.mutate({'op':'get'},self.root)['tasks'][0]['steps']
+  for old,new in zip(before,after):
+   for key in ('reported','done','source','evidence','needsReview'):
+    self.assertEqual(old.get(key),new.get(key),(old['id'],key))
+  self.assertEqual(after[-1]['reported'],'pending')
+ def test_omitted_status_preserves_blocked_step(self):
+  self.plan();self.request(op='report',taskId='t',stepId='one',status='blocked',evidence='Waiting for required input')
+  self.plan([{'id':'one','text':'Build'}])
+  step=d.mutate({'op':'get'},self.root)['tasks'][0]['steps'][0]
+  self.assertEqual(step['reported'],'blocked');self.assertFalse(step['done'])
  def test_retired_steps_preserved(self):
   self.plan();self.plan([{'id':'two','text':'Ship'}]);s=d.mutate({'op':'get'},self.root)
   self.assertEqual(s['tasks'][0]['retiredSteps'][0]['id'],'one')

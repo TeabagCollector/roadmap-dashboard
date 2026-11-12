@@ -25,17 +25,17 @@
     {
       "path": "README.md",
       "bytes": 6215,
-      "sha256": "6803b5e53f440fd8cabccb1bf3347aa853386e88877144cb912d872fa53c494a"
+      "sha256": "76014002af0016d703ea8cd61614f155cf5ad02998bb5e1ef2f8defe2e2ee712"
     },
     {
       "path": "README.zh-CN.md",
       "bytes": 5552,
-      "sha256": "9ce464837bcbf2a5027fc5ba1d5a8de346b6befbff83fd41c65ac9f02f6ffc87"
+      "sha256": "433d92f42a24af9ea1dccd013454d354561f653a556da2f2f261d8176b64f0e1"
     },
     {
       "path": "build.sh",
       "bytes": 1790,
-      "sha256": "418772323f00e950b94ec4b612be92d48c058e713937485fb0419f71b9f387a4"
+      "sha256": "2aafde01c6d62c6610efb5d21cafac1898b28c91215d6552f0aa5070aa5e55cf"
     },
     {
       "path": "docs/CONNECT.md",
@@ -55,7 +55,7 @@
     {
       "path": "docs/INSTALL-MACOS.md",
       "bytes": 6866,
-      "sha256": "e2a939cfdfd786cb7ba525da7ce11725b2c2a57e17b128b52a2dcfdadf7da99a"
+      "sha256": "0243bf7be587df68a9c3a5f20e51fae4e11d748c0a75071aa3fb37f157e531ea"
     },
     {
       "path": "docs/LANDSCAPE.md",
@@ -120,7 +120,7 @@
     {
       "path": "scripts/package_macos.py",
       "bytes": 5788,
-      "sha256": "1335942f20904a7902d462bf5f68d65288e66e5883df78c0bb55caea8ca733f9"
+      "sha256": "6c77b7d9e43d06d1cde4c081a4921f5bf61a369181c186c5ea9d60fdfa6f507b"
     },
     {
       "path": "skills/roadmap-dashboard-sync/SKILL.md",
@@ -189,8 +189,8 @@
     },
     {
       "path": "sync/dashboard.py",
-      "bytes": 23981,
-      "sha256": "66089feed103faca3b99f93af6522319d1ec1c6da6a8eca3477b200311abda25"
+      "bytes": 24267,
+      "sha256": "5c20f5c10165b34b4dc6d7311d9607b46d6c220d39788a70a6be863da8ce19ab"
     },
     {
       "path": "sync/setup.py",
@@ -219,8 +219,8 @@
     },
     {
       "path": "tests/test_sync.py",
-      "bytes": 11139,
-      "sha256": "54a7f3f6da70518bde87bc0517ce5247679f85529782faa05041925ad0f3e91b"
+      "bytes": 12336,
+      "sha256": "5fd1ce33381042fafd459462ede4be3a79b237a4e09fdb8aff98c71e42c8530b"
     },
     {
       "path": "tests/updater/RelaunchReceipt.m",
@@ -240,7 +240,7 @@
     {
       "path": "updates/appcast.xml",
       "bytes": 1119,
-      "sha256": "0113fe0b2583c1c90828acc6864ee08b14c55e00951c4b38b97cd367eecd9092"
+      "sha256": "faf6656ecb0736b5fea3f7b779e388dc011ae4f052af175ebd36661722367eca"
     },
     {
       "path": "updates/public-key.txt",
