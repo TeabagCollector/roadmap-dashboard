@@ -3,6 +3,9 @@ set -euo pipefail
 project_root="$(cd "$(dirname "$0")" && pwd)"
 app="$project_root/build/Roadmap Dashboard Preview.app"
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources/ui" "$app/Contents/Resources/runtime/sync" "$app/Contents/Resources/runtime/samples" "$project_root/build/module-cache"
+mkdir -p "$project_root/build/tools"
+swiftc -module-cache-path "$project_root/build/module-cache" -framework AppKit -framework CoreText "$project_root/scripts/make_icon.swift" -o "$project_root/build/tools/make-icon"
+"$project_root/build/tools/make-icon" "$app/Contents/Resources"
 python3 - "$project_root" "$app" <<'PY'
 import sys,shutil,plistlib
 from pathlib import Path
@@ -12,7 +15,7 @@ for name in ('dashboard.py','setup.py','client.py'):shutil.copyfile(root/'sync'/
 shutil.copytree(root/'skills',app/'Contents/Resources/runtime/skills',dirs_exist_ok=True)
 for cache in (app/'Contents/Resources/runtime').rglob('__pycache__'):shutil.rmtree(cache)
 shutil.copyfile(root/'samples/demo.json',app/'Contents/Resources/runtime/samples/demo.json')
-info={'CFBundleName':'Roadmap Dashboard Preview','CFBundleDisplayName':'Roadmap Dashboard Preview','CFBundleIdentifier':'local.roadmap-dashboard.preview','CFBundleExecutable':'roadmap-dashboard','CFBundlePackageType':'APPL','CFBundleShortVersionString':'0.5.0-preview.7-source','CFBundleVersion':'11','LSUIElement':True,'NSHighResolutionCapable':True,'LSMinimumSystemVersion':'15.0'}
+info={'CFBundleName':'Roadmap Dashboard Preview','CFBundleDisplayName':'Roadmap Dashboard Preview','CFBundleIdentifier':'local.roadmap-dashboard.preview','CFBundleExecutable':'roadmap-dashboard','CFBundlePackageType':'APPL','CFBundleIconFile':'AppIcon.icns','CFBundleShortVersionString':'0.5.0-preview.8-source','CFBundleVersion':'12','LSUIElement':True,'NSHighResolutionCapable':True,'LSMinimumSystemVersion':'15.0'}
 (app/'Contents/Info.plist').write_bytes(plistlib.dumps(info))
 PY
 swiftc -module-cache-path "$project_root/build/module-cache" -framework AppKit -framework WebKit -framework Carbon "$project_root/src/Monitor.swift" "$project_root/src/Updater.swift" -o "$app/Contents/MacOS/roadmap-dashboard"

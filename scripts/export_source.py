@@ -15,6 +15,7 @@ FILES = (
  'scripts/export_source.py','scripts/install.py','scripts/package_macos.py','docs/INSTALL-MACOS.md','docs/CONNECT.md','docs/PRIVACY.md','docs/LANDSCAPE.md','docs/DESIGN.md',
  'docs/preview-en.png','docs/preview-zh.png','docs/demo-en.gif','docs/demo-zh.gif','docs/DEMO.md',
  'skills/roadmap-dashboard-sync/SKILL.md',
+ 'assets/icon.svg','assets/icon.png','scripts/make_icon.swift',
 )
 
 def scan_bytes(name, data):

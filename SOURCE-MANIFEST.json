@@ -24,18 +24,28 @@
     },
     {
       "path": "README.md",
-      "bytes": 6215,
-      "sha256": "76014002af0016d703ea8cd61614f155cf5ad02998bb5e1ef2f8defe2e2ee712"
+      "bytes": 6298,
+      "sha256": "57467364eb5aaba0c4e5f541267e20b4f1d540575ce67a03d52f4b33a24405b1"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 5552,
-      "sha256": "433d92f42a24af9ea1dccd013454d354561f653a556da2f2f261d8176b64f0e1"
+      "bytes": 5635,
+      "sha256": "53fcadd8a71a1146c7b5f40f57396f068254e6e247001c7260da3f56f7406acf"
+    },
+    {
+      "path": "assets/icon.png",
+      "bytes": 254189,
+      "sha256": "5f6d7fab96f95d38f087b555abcc34aaee15f67611570198e460edf23148336a"
+    },
+    {
+      "path": "assets/icon.svg",
+      "bytes": 2095,
+      "sha256": "71fe7dfbc79c6a4a8306c54666abaa2293c832ee2b465ec3e57a92066ec5931a"
     },
     {
       "path": "build.sh",
-      "bytes": 1790,
-      "sha256": "2aafde01c6d62c6610efb5d21cafac1898b28c91215d6552f0aa5070aa5e55cf"
+      "bytes": 2105,
+      "sha256": "69d7ae276877a0f5158ce24013bdac691c1831a65abab57be8e4bb62f75dc6d8"
     },
     {
       "path": "docs/CONNECT.md",
@@ -55,7 +65,7 @@
     {
       "path": "docs/INSTALL-MACOS.md",
       "bytes": 6866,
-      "sha256": "0243bf7be587df68a9c3a5f20e51fae4e11d748c0a75071aa3fb37f157e531ea"
+      "sha256": "9edcbeb0aff0881c0f33e9aa819a0e54911de9f1f3b064e95ad928c85fab71de"
     },
     {
       "path": "docs/LANDSCAPE.md",
@@ -99,8 +109,8 @@
     },
     {
       "path": "scripts/export_source.py",
-      "bytes": 5648,
-      "sha256": "d07e0f61c39a5c4555e0b8dcaa95d48ab2405c2b9b7f413c1cd945762bb7b0d5"
+      "bytes": 5712,
+      "sha256": "c69a47dec8281303f826d94ac4d9c12df1f700612c5555bbde9bdbce823e0e18"
     },
     {
       "path": "scripts/fetch_sparkle.py",
@@ -118,9 +128,14 @@
       "sha256": "1dab1a721f7a4b41d42ace3109069dbdee553ea7330dffc4888d29974c1af219"
     },
     {
+      "path": "scripts/make_icon.swift",
+      "bytes": 5809,
+      "sha256": "1a662d729dc3188ceb2298237394bd91c6f57d9b3e8ceb270441a4999b44f5bf"
+    },
+    {
       "path": "scripts/package_macos.py",
       "bytes": 5788,
-      "sha256": "6c77b7d9e43d06d1cde4c081a4921f5bf61a369181c186c5ea9d60fdfa6f507b"
+      "sha256": "2980c44784fa4734419b3d7d7dbb490f970426596d461f8c5840e21c1abbc7e9"
     },
     {
       "path": "skills/roadmap-dashboard-sync/SKILL.md",
@@ -240,7 +255,7 @@
     {
       "path": "updates/appcast.xml",
       "bytes": 1119,
-      "sha256": "faf6656ecb0736b5fea3f7b779e388dc011ae4f052af175ebd36661722367eca"
+      "sha256": "a2c533fbade507b52ad2905a723d04c45d4eeb03f1acdba7bf6184aa5270b4f0"
     },
     {
       "path": "updates/public-key.txt",
